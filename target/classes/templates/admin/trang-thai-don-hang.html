@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+  <title>Trạng thái đơn hàng</title>
+
+  <th:block id="css">
+
+  </th:block>
+</head>
+
+<body>
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-12">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="/admin/dashboard">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">
+              Trạng thái đơn hàng
+            </li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row py-2">
+        <div class="col-12">
+
+          <a href="/admin/trang-thai-don-hang" type="button" class="btn btn-info">
+            <i class="fas fa-redo"></i> Refresh
+          </a>
+        </div>
+      </div>
+      <div th:if="${message != null}" class="alert">
+        <p th:text="${message}"></p>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <table id="table-manufacturer" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>Mã trạng thái</th>
+                  <th>Khách Hàng</th>
+                  <th>Mã giỏ hàng </th>
+                  <th>Trạng thái</th>
+                  <th>Thao Tác</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr th:each="status : ${status}">
+                  <td th:text="${status.statusCode}"></td>
+                  <td th:text="${status.user != null ? status.user.name : 'Không có thông tin'}"></td>
+                  <td th:text="${status.shoppingCart != null ? status.shoppingCart.shoppingCartCode : 'Không có thông tin'}"></td>
+                  <td th:text="${status != null ? status.nameStatus : 'Không có thông tin'}"></td>
+
+                  <td>
+                    <form th:action="@{/notifications/update-status/{statusCode}(statusCode=${status.statusCode})}" method="POST">
+                      <!-- Thêm điều kiện để khóa select nếu trạng thái là 'Đã giao' -->
+                      <select name="newStatus" th:disabled="${status.nameStatus == 'Đã giao'}">
+                        <option value="Đang giao" th:selected="${status.nameStatus == 'Đang giao'}">Đang giao</option>
+                        <option value="Đang gặp vấn đề" th:selected="${status.nameStatus == 'Đang gặp vấn đề'}">Đang gặp vấn đề</option>
+                        <option value="Đã giao" th:selected="${status.nameStatus == 'Đã giao'}">Đã giao</option>
+                        <option value="Hủy" th:selected="${status.nameStatus == 'Hủy'}">Hủy</option>
+                      </select>
+                      <button type="submit"
+                              onclick="return confirm('Bạn có chắc chắn muốn thay đổi trạng thái không?')"
+                              th:disabled="${status.nameStatus == 'Đã giao'}">
+                        Cập nhật trạng thái
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+
+
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+</body>
+</html>
+<th:block id="js">
+
+</th:block>

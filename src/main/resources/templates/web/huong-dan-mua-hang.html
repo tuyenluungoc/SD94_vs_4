@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #main-content}, ~{:: #js})}">
+<head>
+    <title>Hướng dẫn mua hàng</title>
+
+    <th:block id="css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+              integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+              integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+        <!--        <link rel="stylesheet" th:href="@{/static/web/css/bao-hanh.css}">-->
+
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                margin: 0;
+                padding: 0;
+                background-color: #f8f9fa;
+            }
+
+            h1 {
+                text-align: center;
+                color: #007bff;
+                font-size: 36px;
+                margin-bottom: 20px;
+            }
+            .intro {
+                text-align: center;
+                font-size: 18px;
+                color: #6c757d;
+                margin-bottom: 30px;
+            }
+            .step {
+                background-color: #fff;
+                border-radius: 8px;
+                padding: 30px;
+                margin-bottom: 40px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .step:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            }
+            .step h2 {
+                color: #343a40;
+                font-size: 28px;
+                margin-bottom: 15px;
+            }
+            .step p {
+                color: #495057;
+                line-height: 1.6;
+                font-size: 16px;
+            }
+            .step-images {
+                display: flex;
+                justify-content: space-evenly;
+                margin-top: 15px;
+            }
+            .step-images img {
+                width: 32%;
+                border-radius: 8px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .step-images img:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            }
+            .cta {
+                text-align: center;
+                margin-top: 40px;
+            }
+            .cta button {
+                background-color: #28a745;
+                color: white;
+                padding: 15px 40px;
+                border: none;
+                border-radius: 50px;
+                font-size: 18px;
+                cursor: pointer;
+                transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            }
+            .cta button:hover {
+                background-color: #218838;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            }
+            footer {
+                text-align: center;
+                margin-top: 50px;
+                padding: 20px;
+                background-color: #007bff;
+                color: white;
+                font-size: 14px;
+            }
+        </style>
+</head>
+
+<body>
+<th:block id="main-content">
+    <div class="container">
+        <h1>Hướng Dẫn Mua Hàng</h1>
+        <p class="intro">Làm theo các bước đơn giản dưới đây để chọn và mua flycam tốt nhất cho nhu cầu của bạn.</p>
+
+        <!-- Bước 1 -->
+        <div class="step">
+            <h2>Bước 1: Tìm kiếm sản phẩm cần mua</h2>
+            <p>Cách 1: Sử dụng ô “Tìm kiếm” phía trên, gõ tên sản phẩm đang quan tâm. Website sẽ đưa ra sản phẩm chính xác hoặc gợi ý những sản phẩm có liên quan dựa trên từ khóa mà quý khách đang tìm kiếm.  <br>
+                Cách 2: Tìm theo danh mục sản phẩm trên thanh menu. Các dòng sản phẩm được phân ra bao gồm Mavic, Osmo, Ronin, Phantom, Inspire, FPV, Tello, Enterprise, Robomaster và Service. Các sản phẩm được tổng hợp lại theo từng dòng để khách hàng có được một cái nhìn tổng quan nhất.<div class="step-images">
+            <img src="img/muaSp.jpg" alt="Flycam Model 1">
+
+            <img src="img/muaSp2.jpg" alt="Flycam Model 3">
+        </div>
+        </div>
+
+        <!-- Bước 2 -->
+
+        <!-- Bước 4 -->
+        <div class="step">
+            <h2>Bước 2: Tiến hành đặt hàng</h2>
+            <p>Sau khi lựa chọn được sản phẩm muốn mua, khách hàng tiến hành đặt hàng bằng cách:
+                <br>
+                – Điều chỉnh số lượng sản phẩm cần mua. Sau đó chọn ngay vào nút THÊM VÀO GIỎ HÀNG.
+                <br>
+                *Lưu ý: Đối với một sản phẩm có nhiều phiên bản, quý khách thực hiện chọn phiên bản trước khi thêm sản phẩm vào giỏ hàng. Quý khách cũng có thể thêm nhiều sản phẩm khác vào giỏ hàng trước khi thanh toán.
+                <br>
+                – Với chức năng Giỏ hàng, khách hàng có thể xem lại các sản phẩm đã chọn hoặc thực hiện bước THANH TOÁN ngay
+            <div class="step-images">
+                <img src="img/datHang0.jpg" alt="Bước 1">
+                <img src="img/datHang.jpg" alt="Bước 2">
+                <img src="img/datHang3.jpg" alt="Bước 3">
+            </div>
+            <div class="cta">
+                <button>Mua ngay</button>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <section class="features">
+                <div class="container">
+                    <div class="feature">
+                        <i class="fas fa-shipping-fast"></i>
+                        <p>Giao hàng toàn quốc</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-credit-card"></i>
+                        <p>Hỗ trợ trả góp nhanh chóng</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Bảo hành chính hãng</p>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-store"></i>
+                        <p>DJI Store tại Việt Nam</p>
+                    </div>
+                </div>
+            </section>
+            <hr>
+            <br>
+            <br>
+            <div class="container">
+                <div class="footer-section">
+                    <h3>DJI BY VJO VIETNAM</h3>
+                    <p>Địa chỉ: Số 279 Đường Lĩnh Nam, Phường Vĩnh Hưng, Quận Hoàng Mai, TP Hà Nội, Việt Nam</p>
+                    <p>Hotline: 0815.000.060</p>
+                    <p>DKKD số 0108676636 do Sở Kế hoạch và Đầu tư TP. Hà Nội cấp ngày 29/03/2019</p>
+                    <div class="social-icons">
+                        <i class="fab fa-facebook"></i>
+                        <i class="fab fa-instagram"></i>
+                        <i class="fab fa-twitter"></i>
+                        <i class="fas fa-phone"></i>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h3>SẢN PHẨM</h3>
+                    <ul>
+                        <li>Flycam</li>
+                        <li>Gimbal</li>
+                        <li>FPV</li>
+                        <li>Phụ kiện flycam</li>
+                        <li>Phụ kiện gimbal</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>HỆ THỐNG PHÂN PHỐI SẢN PHẨM</h3>
+                    <ul>
+                        <li>DJI Store Hà Nội</li>
+                        <li>TP. Hồ Chí Minh</li>
+                        <li>Đà Nẵng</li>
+                        <li>Quảng Ninh</li>
+                        <li>Nghệ An</li>
+                        <li>Thanh Hóa</li>
+                        <li>Đắk Lắk</li>
+                        <li>Khánh Hòa</li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>ĐĂNG KÍ</h3>
+                    <p>Đăng kí để nhận các thông báo về khuyến mãi và các thông tin hữu ích về sản phẩm.</p>
+                    <form>
+                        <input type="text" placeholder="Tên">
+                        <input type="email" placeholder="Email">
+                        <input type="text" placeholder="Số điện thoại">
+                        <button type="submit">ĐĂNG KÍ</button>
+                    </form>
+                </div>
+            </div>
+        </footer>
+
+</th:block>
+<th:block id="js">
+
+</th:block>
+</body>
+
+</html>

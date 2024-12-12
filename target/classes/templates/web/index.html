@@ -1,0 +1,406 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #main-content}, ~{:: #js})}">
+<head>
+    <title>Trang chủ</title>
+
+    <th:block id="css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+              integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+              integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link rel="stylesheet" th:href="@{/web/css/style.css}"/>
+
+        <style>
+
+
+
+        </style>
+    </th:block>
+
+
+</head>
+
+
+<body>
+<th:block id="main-content">
+
+    <div class="product-category" style="background-color: rgba(255, 255, 255, 0.8); border-radius: 10px; padding: 10px;">
+        <div class="container">
+            <ul class="product-list" style="list-style-type: none; padding: 0;">
+                <th:block th:each="category : ${categories}">
+                    <li style="display: inline-block; margin: 10px; text-align: center;">
+                        <img th:src="${category.img}"
+                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
+                             th:alt="${category.name}"/>
+                        <p th:text="${category.name}"
+                           style="margin-top: 5px; font-size: 14px; color: #333;"></p>
+                    </li>
+                </th:block>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Product Section -->
+    <div class="main-product">
+        <div class="container">
+            <div class="gt-container" style="display: flex; justify-content: space-between; height: 500px;">
+                <div class="slideshow-container" style="flex: 3; position: relative; height: 100%; overflow: hidden;">
+                    <div class="slides" style="display: none; width: 100%; height: 100%;">
+                        <img src="/img/nghenhin_dji-air-3s_1.jpg" alt="Slide 1" class="image" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="slides" style="display: none; width: 100%; height: 100%;">
+                        <img src="/img/hq720.jpg" alt="Slide 2" class="image" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                    <div class="slides" style="display: none; width: 100%; height: 100%;">
+                        <img src="/img/img_1067-1-1.jpg" alt="Slide 3" class="image" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+
+                    <!-- Navigation dots -->
+                    <div class="dots-container" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex;">
+                        <span class="dot" onclick="currentSlide(1)" style="height: 15px; width: 15px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.3s ease; cursor: pointer;"></span>
+                        <span class="dot" onclick="currentSlide(2)" style="height: 15px; width: 15px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.3s ease; cursor: pointer;"></span>
+                        <span class="dot" onclick="currentSlide(3)" style="height: 15px; width: 15px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.3s ease; cursor: pointer;"></span>
+                    </div>
+                </div>
+
+                <div class="banner-container" style="flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; ">
+                    <div class="banner" style="width: 100%; height: 33%; background-color: #f1f1f1; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;border-radius:20px">
+                        <img src="/img/img_1067-1-1.jpg" alt="Banner 1" class="banner-image" style="max-width: 100%; max-height: 100%; object-fit: contain;border-radius:20px">
+                    </div>
+                    <div class="banner" style="width: 100%; height: 33%; background-color: #f1f1f1; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;border-radius:20px">
+                        <img src="/img/img_1067-1-1.jpg" alt="Banner 2" class="banner-image" style="max-width: 100%; max-height: 100%; object-fit: contain;border-radius:20px">
+                    </div>
+                    <div class="banner" style="width: 100%; height: 33%; background-color: #f1f1f1; display: flex; align-items: center; justify-content: center;border-radius:20px">
+                        <img src="/img/img_1067-1-1.jpg" alt="Banner 3" class="banner-image" style="max-width: 100%; max-height: 100%; object-fit: contain;border-radius:20px">
+                    </div>
+                </div>
+
+            </div>
+
+
+            <br>
+            <h1 style="color: whitesmoke"> Tin Nổi Bật</h1>
+            <div class="card-container-tin" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 10px;">
+                <div class="card-tin" th:each="blog : ${latestBlogs}"
+                     style="width: 40%; max-width: 500px; min-height: 400px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; align-items: center;">
+                    <!-- Card link -->
+                    <a th:href="@{/blogs/{blogCode}(blogCode=${blog.blogCode})}" style="text-decoration: none; color: inherit;">
+                        <div class="card-image-container-tin" style="width: 100%; display: flex; justify-content: center;">
+                            <img th:src="@{${blog.thumbnail}}" alt="${blog.title}" class="card-image"
+                                 style="width: 50%; max-height: 200px; object-fit: cover;">
+                        </div>
+
+                        <div class="card-content-tin" style="padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
+                            <h2 class="card-title-tin" th:text="${blog.title}" style="font-size: 1.5em; margin: 10px 0; word-wrap: break-word; overflow-wrap: break-word; text-align: center;"></h2>
+                            <p class="card-text-tin" th:text="${blog.description}" style="font-size: 1em; margin: 0; word-wrap: break-word; overflow-wrap: break-word; text-align: center;"></p>
+                        </div>
+
+                    </a>
+                </div>
+            </div>
+
+
+
+
+
+
+
+            <!-- Section Giới Thiệu -->
+            <section class="about-section"style="background-color: transparent;">
+                <div class="section-container">
+                    <div class="image-container">
+                        <img class="anhGT" src="/img/section.jpg" alt="DJI Image">
+                    </div>
+                    <div class="text-container">
+                        <h2>GIỚI THIỆU</h2>
+                        <p>
+                            DJI by VJO Việt Nam tự hào trở thành DJI Store đầu tiên tại Việt Nam đem đến cho khách hàng
+                            một không gian trải nghiệm sản phẩm vô cùng độc đáo và thú vị. Là đại lý phân phối chính thức
+                            của DJI, khi đến với cửa hàng của chúng tôi, khách hàng sẽ được thỏa sức trải nghiệm các sản phẩm
+                            flycam, gimbal, action camera chính hãng, chất lượng cao cũng như các thiết bị nhỏ gọn đẳng cấp khác
+                            đến từ thương hiệu nổi tiếng này.
+                        </p>
+                        <p>
+                            Ngoài ra, tại đây, chúng tôi còn cung cấp dịch vụ chăm sóc tận tình, chu đáo, cùng nhiều chế độ bảo
+                            hành uy tín nhằm mang đến sự hài lòng nhất cho khách hàng.
+                        </p>
+                    </div>
+                </div>
+            </section>
+            <div class="banner-video-container" style="position: relative; width: 100%; height: 300px; overflow: hidden;">
+                <video autoplay muted loop style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; object-fit: cover; z-index: 1;">
+                    <source src="https://dji-vietnam.vn/wp-content/uploads/2023/04/video-mavic-3-pro.mp4" type="video/mp4">
+                    Trình duyệt của bạn không hỗ trợ video.
+                </video>
+                <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-left: 20px; z-index: 2; color: #fff; text-align: left;">
+                    <h1 style="font-size: 2rem; margin: 0;">DJI MAVIC 3 PRO</h1>
+                    <p style="font-size: 1.2rem; margin: 10px 0 0;">Nắm bắt mọi khung hình trên không</p>
+                    <a href="http://localhost:8080/products/mv0013" style="margin-top: 20px; padding: 10px 20px; font-size: 1rem; color: #fff; background-color: #ff6600; border: none; border-radius: 5px; text-decoration: none; cursor: pointer;">Mua ngay</a>
+                </div>
+            </div>
+
+
+            <h1>DJI MINI</h1>
+            <div class="card-container" style="flex-wrap: nowrap;">
+                <div th:each="product : ${productsmini}" class="card"style="background-color: rgba(255, 255, 255, 0.8)">
+                    <!-- Thêm thẻ <a> để bao quanh thẻ .card, sử dụng productCode làm tham số -->
+                    <a th:href="@{/products/{productCode}(productCode=${product.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${product.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${product.name}">Tên sản phẩm</h2>
+
+                        <p class="card-text" th:text="${product.description} ">Mô tả</p>
+                    </a>
+                </div>
+            </div>
+
+
+            <h1>DJI MAVIC</h1>
+            <div class="card-container" style="flex-wrap: nowrap;" >
+                <div th:each="productmavic : ${productsmavic}" class="card"  >
+                    <a th:href="@{/products/{productCode}(productCode=${productmavic.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${productmavic.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${productmavic.name}">Tên sản phẩm</h2>
+                        <p class="card-text" th:text="${productmavic.description} ">Mô tả</p>
+                        <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                    </a>
+                </div>
+            </div>
+
+
+
+            <h1>DJI FPV</h1>
+            <div class="card-container" style="flex-wrap: nowrap;">
+                <div th:each="productsfpv : ${productsfpv}" class="card" style="width: 37%" >
+                    <a th:href="@{/products/{productCode}(productCode=${productsfpv.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${productsfpv.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${productsfpv.name}">Tên sản phẩm</h2>
+                        <p class="card-text" th:text="${productsfpv.description} ">Mô tả</p>
+                        <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                    </a>
+                </div>
+            </div>
+
+            <!-- DJI INS Section -->
+            <h1>DJI Inspire</h1>
+            <div class="card-container" style="flex-wrap: nowrap;">
+                <div th:each="productsins : ${productsins}" class="card">
+                    <a th:href="@{/products/{productCode}(productCode=${productsins.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${productsins.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${productsins.name}">Tên sản phẩm</h2>
+                        <p class="card-text" th:text="${productsins.description} ">Mô tả</p>
+                    </a>
+                </div>
+            </div>
+
+            <h1>DJI MAVIC AIR</h1>
+            <div class="card-container" style="flex-wrap: nowrap;">
+                <div th:each="productsmar : ${productsmar}" class="card">
+                    <a th:href="@{/products/{productCode}(productCode=${productsmar.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${productsmar.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${productsmar.name}">Tên sản phẩm</h2>
+                        <p class="card-text" th:text="${productsmar.description} ">Mô tả</p>
+                    </a>
+                </div>
+            </div>
+
+            <h1>DJI agras</h1>
+            <div class="card-container" style="flex-wrap: nowrap;" >
+                <div th:each="productsmas : ${productsmas}" class="card" style="width: 37%" >
+                    <a th:href="@{/products/{productCode}(productCode=${productsmas.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${productsmas.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${productsmas.name}">Tên sản phẩm</h2>
+                        <p class="card-text" th:text="${productsmas.description} ">Mô tả</p>
+                        <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                    </a>
+                </div>
+            </div>
+            <h1>DJI MIC</h1>
+            <!--            productmic của djimic chứ ko phải của productmavic-->
+            <div class="card-container" style="flex-wrap: nowrap;" >
+                <div th:each="productmic : ${productmic}" class="card" style="width: 37%" >
+                    <a th:href="@{/products/{productCode}(productCode=${productmic.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${productmic.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${productmic.name}">Tên sản phẩm</h2>
+                        <p class="card-text" th:text="${productmic.description} ">Mô tả</p>
+                        <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                    </a>
+                </div>
+            </div>
+            <!--            productmavic đổi cảằng này ưữaăng sao cho no giong di chu toan productmavic -->
+            <!--            cái t-->
+            <h1>DJI osmo action</h1>
+            <div class="card-container" style="flex-wrap: nowrap;">
+                <div th:each="productsom : ${productsom}" class="card" style="width: 37%" >
+                    <a th:href="@{/products/{productCode}(productCode=${productsom.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${productsom.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${productsom.name}">Tên sản phẩm</h2>
+                        <p class="card-text" th:text="${productsom.description} ">Mô tả</p>
+                        <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                    </a>
+                </div>
+            </div>
+
+
+            <h1>DJI osmo mobile</h1>
+            <div class="card-container"style="flex-wrap: nowrap;"  >
+                <div th:each="productsomm : ${productsomm}" class="card" style="width: 37%" >
+                    <a th:href="@{/products/{productCode}(productCode=${productsomm.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${productsomm.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${productsomm.name}">Tên sản phẩm</h2>
+                        <p class="card-text" th:text="${productsomm.description} ">Mô tả</p>
+                        <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                    </a>
+                </div>
+            </div>
+
+            <div class="banner-image-container" style="position: relative; width: 100%; height: 300px; overflow: hidden; margin-bottom: 20px;">
+                <a href="http://localhost:8080/products/op0005" style="display: block; width: 100%; height: 100%; text-decoration: none;">
+                    <img src="https://dji-vietnam.vn/wp-content/uploads/2023/10/dji-osmo-pocket-3-13-scaled.jpg"
+                         alt="DJI Osmo Pocket 3"
+                         style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.4); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; color: #fff; padding: 20px;">
+                        <h1 style="font-size: 1.8rem; margin: 0;">DJI OSMO POCKET 3</h1>
+                        <p style="font-size: 1rem; margin: 5px 0;">Action camera với cảm biến 1″</p>
+                        <button style="margin-top: 10px; padding: 10px 20px; font-size: 1rem; color: #fff; background-color: #ff6600; border: none; border-radius: 5px; cursor: pointer;">Mua ngay</button>
+                    </div>
+                </a>
+            </div>
+
+
+            <h1>DJI poket</h1>
+            <div class="card-container"  >
+                <div th:each="productop : ${productop}" class="card" style="width: 37%" >
+                    <a th:href="@{/products/{productCode}(productCode=${productop.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${productop.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${productop.name}">Tên sản phẩm</h2>
+                        <p class="card-text" th:text="${productop.description} ">Mô tả</p>
+                        <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                    </a>
+                </div>
+            </div>
+
+            <h1>DJI phantom </h1>
+            <div class="card-container"  >
+                <div th:each="productpt : ${productpt}" class="card" style="width: 37%" >
+                    <a th:href="@{/products/{productCode}(productCode=${productpt.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${productpt.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${productpt.name}">Tên sản phẩm</h2>
+                        <p class="card-text" th:text="${productpt.description} ">Mô tả</p>
+                        <!-- <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                    </a>
+                </div>
+            </div>
+            <div class="banner-container" style="position: relative; width: 100%; height: 300px; overflow: hidden;">
+                <!-- Link toàn bộ banner -->
+                <a href="http://localhost:8080/products/rn0008" style="display: block; width: 100%; height: 100%; position: absolute; top: 0; left: 0; z-index: 1;">
+                    <img src="https://dji-vietnam.vn/wp-content/uploads/2024/04/dji-rs4-series-scaled.jpg"
+                         alt="DJI RS4 Series"
+                         style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; object-fit: cover;">
+                </a>
+                <!-- Nội dung overlay -->
+                <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 50%; height: 100%; background-color: rgba(0, 0, 0, 0.5); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding: 20px; z-index: 2; color: #fff; text-align: left;">
+                    <h1 style="font-size: 2.5rem; margin: 0;">Khám phá DJI RS4 Series</h1>
+                    <p style="font-size: 1.5rem; margin: 10px 0 0;">Gimbal nâng cao cho máy quay chuyên nghiệp</p>
+                    <!-- Nút Mua ngay -->
+                    <a href="http://localhost:8080/products/rn0008" style="margin-top: 20px; padding: 10px 20px; font-size: 1rem; color: #fff; background-color: #ff6600; border: none; border-radius: 5px; text-decoration: none; cursor: pointer;">Mua ngay</a>
+                </div>
+            </div>
+
+
+            <h1>DJI RN </h1>
+            <div class="card-container" >
+                <div th:each="productrn : ${productrn}" class="card" style="width: 37%" >
+                    <a th:href="@{/products/{productCode}(productCode=${productrn.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                        <img th:src="${productrn.image}" alt="${product.name}" class="card-image">
+                        <h2 class="card-title" th:text="${productrn.name}">Tên sản phẩm</h2>
+                        <p class="card-text" th:text="${productrn.description} ">Mô tả</p>
+                        <!-- <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                    </a>
+                </div>
+            </div>
+
+
+
+            <!--ĐĂNG BẠN SỬ LÝ NỐT HỘ TÔI MẤY CÁI CÒN LẠI NHES-->
+
+
+
+            <br>
+            <div class="ud-container">
+                <h1 class="ud-h1">Ứng dụng sản phẩm của DJI trong nhiều lĩnh vực</h1>
+                <div class="ud-card-container">
+                    <div class="ud-card">
+                        <img src="/img/ud1.jpg" alt="Video Production">
+
+                    </div>
+                    <div class="ud-card">
+                        <img src="/img/ud2.jpg" alt="Business">
+
+                    </div>
+                    <div class="ud-card">
+                        <img src="/img/ud3.jpg" alt="Agriculture">
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</th:block>
+
+<th:block id="js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+            integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".movie-list").owlCarousel({
+                items: 4,
+                margin: 20,
+                loop: true
+            });
+        });
+    </script>
+    <script>
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            let slides = document.getElementsByClassName("slides");
+            let dots = document.getElementsByClassName("dot");
+
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+
+            slideIndex++;
+            if (slideIndex > slides.length) {
+                slideIndex = 1;
+            }
+
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+
+            slides[slideIndex-1].style.display = "block";
+            dots[slideIndex-1].className += " active";
+
+            setTimeout(showSlides, 3000); // Change slide every 3 seconds
+        }
+
+        function currentSlide(n) {
+            slideIndex = n;
+            showSlides();
+        }
+    </script>
+</th:block>
+
+</body>
+</html>

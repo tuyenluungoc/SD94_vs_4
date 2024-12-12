@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+  <title>Tất cả bài viết</title>
+
+  <th:block id="css">
+
+  </th:block>
+</head>
+
+<body>
+<div class="content-wrapper">
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-12">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="/admin/dashboard">Dashboard</a>
+            </li>
+            <li class="breadcrumb-item active">Danh sách Hóa đơn</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main content -->
+  <section class="content">
+    <div class="container-fluid">
+      <div class="row py-2">
+        <div class="col-12">
+          <a href="/hoa-don" type="button" class="btn btn-info">
+            <i class="fas fa-redo"></i> Refresh
+          </a>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <div class="card">
+            <div class="card-body">
+              <table id="table-orders" class="table table-bordered table-hover">
+                <thead>
+                <tr>
+                  <th>Mã Hóa đơn</th>
+                  <th>Người dùng</th>
+                  <th>Địa chỉ giao hàng</th>
+                  <th>Tổng tiền</th>
+                  <th>Ngày tạo</th>
+                  <th>Trạng thái</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <!-- Lặp qua từng hóa đơn -->
+                <tr th:each="order : ${orders}">
+                  <td th:text="${order.orderCode}"></td>
+                  <td>
+                    <a th:href="@{/admin/user/detail/{userCode}(userCode=${order.userCode})}"
+                       th:text="${order.user.name}">Người dùng</a>
+                  </td>
+                  <td th:text="${order.shippingAddress}"></td>
+                  <td th:text="${order.totalAmountMoney} + ' VND'">0 VND</td>
+                  <td th:text="${#dates.format(order.createdAt, 'dd/MM/yyyy')}"></td>
+                  <td th:text="${order.status ? 'Hoàn thành' : 'Chưa hoàn thành'}"></td>
+
+
+
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DataTables JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#table-orders').DataTable({
+        paging: true,
+        lengthChange: true,
+        searching: true,
+        ordering: true,
+        info: true,
+        autoWidth: false,
+        responsive: true,
+      });
+    });
+  </script>
+</div>
+
+</div>
+
+</body>
+</html>

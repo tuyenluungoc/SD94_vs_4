@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="vi" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{}, ~{:: #main-content}, ~{:: #js})}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat - User</title>
+
+</head>
+<body>
+<th:block id="main-content">
+    <h2>Kênh Thế Giới </h2>
+    <div id="messageArea"></div>
+    <form id="messageForm">
+        <input type="text" id="message" placeholder="Type a message..." />
+        <button type="submit">Send</button>
+    </form>
+
+
+</th:block>
+<th:block id="js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.4/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlPath = window.location.pathname;
+            const userCode = urlPath.split("/").pop();
+            const socket = new SockJS('/ws');
+            const stompClient = Stomp.over(socket);
+            const messageInput = document.querySelector('#message');
+            const messageArea = document.querySelector('#messageArea');
+            const username = userCode;
+
+            let isConnected = false;
+
+            function connectWebSocket() {
+                if (isConnected) return;
+                stompClient.connect({}, (frame) => {
+                    console.log('Connected: ' + frame);
+                    isConnected = true;
+
+                    stompClient.subscribe('/topic/public', (messageOutput) => {
+                        const message = JSON.parse(messageOutput.body);
+                        displayMessage(message);
+                    });
+
+                    stompClient.send("/app/chat.addUser", {}, JSON.stringify({ sender: username, type: 'JOIN' }));
+                    displayMessage({ sender: username, content: "đã tham gia kênh chat", type: 'INFO' });
+                });
+            }
+
+            function sendMessage(event) {
+                event.preventDefault();
+                const messageContent = messageInput.value.trim();
+                if (messageContent && isConnected) {
+                    const chatMessage = {
+                        sender: username,
+                        content: messageContent,
+                        type: 'CHAT'
+                    };
+                    stompClient.send("/app/chat.sendMessage", {}, JSON.stringify(chatMessage));
+                    messageInput.value = '';
+                }
+            }
+
+            function displayMessage(message) {
+                const messageElement = document.createElement('p');
+                if (message.type === 'INFO') {
+                    messageElement.innerText = `${message.sender}: ${message.content}`;
+                    messageElement.classList.add('info-message');
+                } else {
+                    messageElement.innerText = `${message.sender}: ${message.content}`;
+                    messageElement.classList.add(message.sender === username ? 'user-message' : 'other-message');
+                }
+                messageArea.appendChild(messageElement);
+                messageArea.scrollTop = messageArea.scrollHeight;
+            }
+
+            document.querySelector('#messageForm').addEventListener('submit', sendMessage);
+            connectWebSocket();
+        });
+
+    </script>
+
+</th:block>
+</body>
+</html>

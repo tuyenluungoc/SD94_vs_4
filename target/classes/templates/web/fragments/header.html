@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+<th:block id="css">
+    <style>
+        /*thông báo*/
+        /* Modal styling */
+        .modal {
+            display: none; /* Mặc định ẩn modal */
+            position: fixed;
+            z-index: 1000; /* Đặt modal lên trên các thành phần khác */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4); /* Làm mờ nền */
+        }
+
+        /* Nội dung của modal */
+        .modal-content {
+            background-color: #fff;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 40%;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        /* Nút đóng modal */
+        .close-button {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-button:hover, .close-button:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        /* Danh sách thông báo */
+        #notificationList li {
+            text-align: left;
+            margin: 10px 0;
+            padding: 10px;
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        /* Hiển thị modal khi không có lớp hidden */
+        .modal:not(.hidden) {
+            display: block;
+        }
+
+
+    </style>
+</th:block>
+
+<body>
+<header class="header">
+    <nav class="navbar">
+        <div class="container-header">
+            <div class="logo">
+                <a href="/" ><img src="/img/logodji.png" alt="DJI Logo" style="width: 80px"></a>
+            </div>
+            <ul class="menu">
+                <li><a href="/gioi-thieu">Giới Thiệu</a></li>
+                <li><a href="/san-pham">Sản Phẩm</a></li>
+                <li><a href="/huong-dan-mua-hang">Hướng Dẫn Mua Hàng</a></li>
+                <li><a href="/bao-hanh">Bảo Hành</a></li>
+                <li><a href="/tin-tuc">Tin Tức</a></li>
+                <li><a href="/lien-he">Liên Hệ</a></li>
+                <li><a href="/chatus">kênh thế giới</a></li>
+            </ul>
+            <div class="search-cart">
+                <form id="searchForm" action="/search" method="GET">
+                    <input type="text" name="query" placeholder="Tìm kiếm" id="searchInput">
+                    <button type="submit"><i class="fas fa-search"></i> Tìm kiếm</button>
+                </form>
+                <a href="/own-shoppingcart"><i class="fas fa-shopping-cart"></i></a>
+                <a href="/notifications" class="notification" id="notificationIcon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge">!</span>
+                </a>
+
+<!--                &lt;!&ndash; Modal hiển thị thông báo &ndash;&gt;-->
+<!--                <div id="notificationModal" class="modal hidden">-->
+<!--                    <div class="modal-content">-->
+<!--                        <span class="close-button" id="closeNotification">&times;</span>-->
+<!--                        <h3>Thông báo</h3>-->
+<!--                        <ul id="notificationList">-->
+<!--                            &lt;!&ndash; Các thông báo sẽ được thêm vào đây bằng JavaScript &ndash;&gt;-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+            </div>
+        </div>
+        <div>
+            <div th:if="${session.currentUser == null}">
+                <a class="text-white" href="/dang-nhap">Đăng nhập</a>
+            </div>
+            <div th:if="${session.currentUser != null}" class="d-flex align-items-center">
+                <p th:text="${session.currentUser.name}" class="mb-0 me-2 text-white"></p>
+                <a href="javascript:void(0)" class="text-white fst-italic" onclick="logout()">(Đăng xuất)</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Category Section -->
+
+</header>
+</body>
+<script>
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const notificationIcon = document.getElementById('notificationIcon');
+        const notificationModal = document.getElementById('notificationModal');
+        const closeNotification = document.getElementById('closeNotification');
+        const notificationList = document.getElementById('notificationList');
+
+        // Hàm thêm thông báo mới vào danh sách
+        function addNotification(message) {
+            const li = document.createElement('li');
+            li.textContent = message;
+            notificationList.appendChild(li);
+        }
+
+        // Xử lý sự kiện click để hiển thị modal
+        notificationIcon.addEventListener('click', (event) => {
+            event.preventDefault(); // Ngăn chặn hành động mặc định
+            notificationModal.classList.remove('hidden'); // Hiển thị modal
+
+            // Gửi yêu cầu lấy thông báo từ server
+            fetch('/notifications')
+                .then(response => response.json())
+                .then(data => {
+                    // Xóa thông báo cũ
+                    notificationList.innerHTML = '';
+                    // Thêm các thông báo mới vào danh sách
+                    data.forEach(notification => {
+                        const li = document.createElement('li');
+                        li.textContent = `Trạng thái: ${notification.nameStatus}, Mã đơn: ${notification.shoppingCartCode}`;
+                        notificationList.appendChild(li);
+                    });
+                })
+                .catch(error => {
+                    console.error('Error fetching notifications:', error);
+                });
+        });
+
+        // Đóng modal khi nhấn nút đóng
+        closeNotification.addEventListener('click', () => {
+            notificationModal.classList.add('hidden');
+        });
+
+        // Đóng modal khi click ra ngoài nội dung modal
+        window.addEventListener('click', (event) => {
+            if (event.target === notificationModal) {
+                notificationModal.classList.add('hidden');
+            }
+        });
+
+
+    });
+
+</script>
+</html>

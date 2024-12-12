@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #main-content}, ~{:: #js})}">
+<head>
+    <title>Bảo hành</title>
+
+    <th:block id="css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+              integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+              integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+        <!--        <link rel="stylesheet" th:href="@{/static/web/css/bao-hanh.css}">-->
+
+        <style>
+            /*css cho phần bảo hành*/
+
+            .accordion {
+                width: 80%;
+                max-width: 800px;
+                margin: 20px auto;
+                font-family: Arial, sans-serif;
+            }
+
+            .accordion-item {
+                border-top: 1px solid #ddd;
+            }
+
+            .accordion-header {
+                width: 100%;
+                padding: 15px;
+                font-size: 18px;
+                text-align: left;
+                display: flex;
+                justify-content: space-between;
+                background-color: #f1f1f1;
+                border: none;
+                cursor: pointer;
+                outline: none;
+                transition: background-color 0.3s ease;
+            }
+
+            .accordion-header:hover {
+                background-color: #e0e0e0;
+            }
+
+            .accordion-icon {
+                font-size: 14px;
+                transition: transform 0.3s ease;
+            }
+
+            .accordion-content {
+                display: none;
+                padding: 15px;
+                background-color: #ffffff;
+                text-align: left;
+                border-top: 1px solid #ddd;
+            }
+
+            .accordion-item.active .accordion-content {
+                display: block;
+            }
+
+            .accordion-item.active .accordion-icon {
+                transform: rotate(180deg);
+            }
+            img{
+                width: 60px;
+                height: 60px;
+            }
+
+            .modal {
+                display: none;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                justify-content: center;
+                align-items: center;
+            }
+            .modal-content {
+                background-color: #fff;
+                padding: 20px;
+                border-radius: 8px;
+                width: 50%;
+                text-align: center;
+            }
+            .modal-content input, .modal-content textarea, .modal-content select {
+                width: 100%;
+                margin: 10px 0;
+                padding: 10px;
+            }
+            .close-btn {
+                background-color: red;
+                color: white;
+                padding: 10px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            .submit-btn {
+                background-color: green;
+                color: white;
+                padding: 10px;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+            }
+            .error-message {
+                color: red;
+                display: none;
+            }
+            .thong-tin-bao-hanh{
+                background-color: whitesmoke;
+            }
+            .loi-tra-ve{
+                background-color: whitesmoke;
+            }
+        </style>
+</head>
+
+<body>
+<th:block id="main-content">
+
+    <h1>Tra cứu thông tin sản phẩm</h1>
+    <form action="/bao-hanh/search" method="get">
+        <label for="imei">Nhập IMEI:</label>
+        <input type="text" id="imei" name="imei" required />
+        <button type="submit">Tra cứu</button>
+    </form>
+
+    <!-- Thông báo lỗi -->
+    <p class="loi-tra-ve" th:if="${errorMessage != null}" style="color: red; margin-top: 10px;" th:text="${errorMessage}" ></p>
+
+    <!-- Hiển thị thông tin sản phẩm -->
+    <div th:if="${productName != null}">
+       <div class="thong-tin-bao-hanh">
+           <h2>Thông tin sản phẩm</h2>
+           <p><strong>Tên sản phẩm:</strong> <span th:text="${productName}"></span></p>
+           <p><strong>Trạng thái bảo hành:</strong> <span th:text="${warrantyStatus}"></span></p>
+           <p><strong>Ngày kết thúc bảo hành:</strong> <span th:text="${endDate}"></span></p>
+           <div>
+               <strong>Hình ảnh sản phẩm:</strong>
+               <img th:src="${productImage}" alt="Hình ảnh sản phẩm" style="max-width: 300px;" />
+           </div>
+       </div>
+        <button id="openModal">Thêm yêu cầu bảo hành</button>
+
+        <div class="modal" id="modalForm">
+            <div class="modal-content">
+                <h2>Nhập Yêu Cầu Bảo Hành</h2>
+                <form id="warrantyForm">
+                    <input type="text" id="tim-imei" name="imei" placeholder="IMEI sản phẩm" required>
+                    <span id="imeiError" class="error-message">IMEI không hợp lệ hoặc không tìm thấy!</span>
+
+                    <p>Chọn lý do hỏng:</p>
+                    <div>
+                        <label><input type="checkbox" name="issue" value="Pin hỏng"> Pin hỏng</label><br>
+                        <label><input type="checkbox" name="issue" value="Camera lỗi"> Camera lỗi</label><br>
+                        <label><input type="checkbox" name="issue" value="Cánh quạt bị hỏng"> Cánh quạt bị hỏng</label><br>
+                        <label><input type="checkbox" name="issue" value="Lỗi phần mềm"> Lỗi phần mềm</label><br>
+                        <label>
+                            <input type="checkbox" id="otherReason" value="Lý do khác"> Lý do khác
+                        </label><br>
+                    </div>
+
+                    <!-- Ô nhập chỉ hiển thị khi chọn "Lý do khác" -->
+                    <textarea id="otherDescription" name="otherDescription" placeholder="Vui lòng nhập lý do khác" rows="3" style="display: none;"></textarea>
+
+                    <input type="text" id="resolution" name="resolution" placeholder="Giải pháp (nếu có)">
+
+                    <input type="hidden" id="claimStatus" name="claimStatus" value="Chưa Duyệt">
+
+                    <button type="button" class="close-btn" id="closeModal">Đóng</button>
+                    <button type="submit" class="submit-btn">Gửi</button>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+    <!--    phần này là form thêm yêu cầu bảo hành-->
+
+
+    <div class="accordion">
+        <div class="accordion-item">
+            <button class="accordion-header">
+                <span>Chính sách bảo hành</span>
+                <span class="accordion-icon">▼</span>
+            </button>
+            <div class="accordion-content">
+                <h3>QUY TRÌNH BẢO HÀNH VJO</h3>
+                <p><strong>Bước 1:</strong> Khách hàng trực tiếp mang sản phẩm cần bảo hành tới các trung tâm bảo hành VJO trên toàn quốc. Đối với khách ở xa, vui lòng liên hệ trước với bộ phận kỹ thuật VJO qua hotline: 0813.660.666</p>
+                <p><strong>Bước 2:</strong> VJO tiếp nhận bảo hành, thời gian kiểm tra từ 3 – 5 ngày kể từ ngày tiếp nhận sản phẩm.</p>
+                <p><strong>Bước 3:</strong> Sau khi kiểm tra, VJO sẽ thông báo lại khách hàng tình trạng hỏng.</p>
+                <ul>
+                    <li>Trường hợp lỗi do nhà sản xuất: VJO tiếp nhận sản phẩm, thời gian giải quyết từ 14-20 ngày.</li>
+                    <li>Trường hợp lỗi do người dùng: VJO sẽ cho ý kiến việc sửa chữa, đồng thời tư vấn và báo giá linh kiện cho khách hàng.
+                        <ul>
+                            <li>Khách hàng không đồng ý: VJO sẽ gửi trả lại thiết bị cho khách hàng</li>
+                            <li>VJO gọi điện xác nhận khi đã sửa xong.</li>
+                            <li>VJO kiểm tra, test thiết bị lần cuối để đảm bảo không có bất cứ sai sót nào trước khi giao tới khách hang.</li>
+                            <li>Thời gian giải quyết phụ thuộc vào tình trạng lỗi của sản phẩm.</li>
+
+                        </ul>
+                    </li>
+                </ul>
+                <h3>QUY TRÌNH BẢO HÀNH DJI</h3>
+                <strong>  A. Điều kiện bảo hành</strong><br>
+                <ul>
+                    <li>Là sản phẩm được phân phối bởi VJO, bảo hành áp dụng 03 tháng đối với pin và phụ kiện, 12 tháng đối với các sản phẩm camera hành động, gimbal, các thiết bị chống rung…</li>
+                    <li>Sản phẩm vẫn trong thời hạn bảo hành, được sử dụng bình thường, đúng theo hướng dẫn của nhà sản xuất. </li>
+                    <li>Sản phẩm còn nguyên vẹn, không có dấu hiệu của sự sửa chữa, mở niêm phong, va đập hoặc thay đổi linh kiện.</li>
+                    <li>Số serial sản phẩm phải trùng khớp với số serial trong biên bản mua hàng hoặc có trên hệ thống bảo hành VJO, tem nhãn còn nguyên vẹn, không thấm nước, không có dấu hiệu của sự thay đổi.</li>  
+
+                    <li>Có biên nhận mua hàng hoặc bảo hành điện tử hợp lệ từ VJO.</li>
+                    <li>Việc bảo hành không bao gồm vỏ thùng và các phụ kiện đi kèm với sản phẩm.</li>
+                    <li>Trường hợp sản phẩm không thuộc điều kiện bảo hành, VJO sẽ tư vấn các phương án thay thế sửa chữa cho khách hàng, đảm bảo chất lượng với giá cả  
+                        hợp lý.</li>
+
+                </ul>
+                <strong>B. Sản phẩm không được bảo hành</strong>
+                <ul>
+                    <li>Sản phẩm hư hỏng do hỏa hoạn, thiên tai hoặc do động vật gây ra.</li>
+                    <li>Sản phẩm đã hết hạn bảo hành.</li>
+                    <li>Sản phẩm không được phân phối bởi hệ thống VJO.</li>
+                    <li>Sản phẩm có dấu hiệu rơi vỡ, dấu hiệu va chạm mạnh, nước hoặc hóa chất rơi vào sản phẩm khiến bị ẩm, chập cháy.</li>
+                    <li>Sản phẩm đã thay đổi linh kiện, có dấu hiệu tháo mở, rách tem, serial không có trên hệ thống bảo hành, có tác động kĩ thuật trong quá trình sử dụng.</li>
+                </ul>
+
+                <strong>C. Giao nhận sản phẩm</strong>
+                <ul>
+                    <li>Khách hàng giao và nhận sản phẩm tại trung tâm bảo hành của VJO gần nhất (địa chỉ vui lòng tham khảo tại mục: Bảo hành -> Hỗ trợ bảo hành DJI -> Địa điểm bảo hành).</li>  
+
+                    <li>Khách hàng sẽ chịu tất cả các chi phí vận chuyển và chi phí phát sinh khác (nếu có).</li>
+                    <li>Trường hợp sản phẩm có lỗi do nhà sản xuất, VJO sẽ chịu toàn bộ chi phí vận chuyển, sửa chữa và đổi trả.</li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block id="js">
+    <script>
+
+        document.getElementById('otherReason').addEventListener('change', function() {
+            const otherDescription = document.getElementById('otherDescription');
+            if (this.checked) {
+                otherDescription.style.display = 'block';
+                otherDescription.setAttribute('required', 'required');
+            } else {
+                otherDescription.style.display = 'none';
+                otherDescription.removeAttribute('required');
+            }
+        });
+        // Accordion JavaScript
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function () {
+                const accordionItem = this.parentElement;
+                accordionItem.classList.toggle('active');
+            });
+        });
+
+
+            // JavaScript mở/đóng modal
+            document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById("modalForm");
+            const openModal = document.getElementById("openModal");
+            const closeModal = document.getElementById("closeModal");
+            const imeiInput = document.getElementById("tim-imei");
+            const imeiError = document.getElementById("imeiError");
+            const form = document.getElementById("warrantyForm");
+
+            // Mở modal
+            openModal.addEventListener("click", () => {
+            modal.style.display = "flex";
+        });
+
+            // Đóng modal
+            closeModal.addEventListener("click", () => {
+            modal.style.display = "none";
+        });
+
+                // Kiểm tra IMEI
+                imeiInput.addEventListener("blur", async () => {
+                    const imei = imeiInput.value.trim();
+                    if (imei) {
+                        const warranty = await fetchWarrantyByImei(imei);
+                        imeiError.style.display = warranty ? "none" : "block";
+                    } else {
+                        imeiError.style.display = "none";
+                    }
+                });
+
+// Xử lý submit form
+                form.addEventListener("submit", async (e) => {
+                    e.preventDefault();
+
+                    const imei = imeiInput.value.trim();
+                    const warranty = await fetchWarrantyByImei(imei);
+
+                    if (!warranty) {
+                        imeiError.style.display = "block";
+                        return;
+                    }
+
+                    // Lấy danh sách các lý do hỏng
+                    const selectedReasons = Array.from(form.querySelectorAll("input[name='issue']:checked"))
+                        .map(input => input.value);
+
+                    // Kiểm tra và thêm lý do khác (nếu có)
+                    const otherDescription = form.otherDescription.value.trim();
+                    if (selectedReasons.includes("Lý do khác") && otherDescription) {
+                        selectedReasons[selectedReasons.indexOf("Lý do khác")] = otherDescription;
+                    }
+
+                    const data = {
+                        warrantyCode: warranty.warrantyCode,
+                        issues: selectedReasons, // Gửi danh sách lý do hỏng
+                        resolution: form.resolution.value.trim(),
+                        claimStatus: form.claimStatus.value,
+                    };
+
+                    const response = await fetch(`/bao-hanh/yeu-cau-bao-hanh/${imei}`, {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(data),
+                    });
+                    if (response.ok) {
+                        alert("Yêu cầu bảo hành đã được thêm thành công!");
+                        form.reset();
+                        modal.style.display = "none";
+                    } else {
+                        const errorMessage = await response.text();
+                        alert("Có lỗi xảy ra: " + errorMessage);
+                    }
+                });
+
+
+                // Hàm lấy thông tin bảo hành theo IMEI
+            async function fetchWarrantyByImei(imei) {
+            try {
+            const response = await fetch(`/bao-hanh/validate-imei/${imei}`);
+            if (response.ok) {
+            return await response.json();
+        }
+        } catch (error) {
+            console.error("Lỗi khi kiểm tra IMEI:", error);
+        }
+            return null;
+        }
+        });
+
+
+
+
+    </script>
+</th:block>
+</body>
+
+</html>

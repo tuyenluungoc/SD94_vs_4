@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #main-content}, ~{:: #js})}">
+<head>
+    <title>Bảo hành</title>
+
+    <th:block id="css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+              integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+              integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+        <!--        <link rel="stylesheet" th:href="@{/static/web/css/bao-hanh.css}">-->
+
+        <style>
+
+            body {
+                font-family: Arial, sans-serif;
+                background-color: #f4f4f4;
+            }
+
+            /* Hero Section */
+            .hero {
+                color: white;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 400px;
+                background: url('https://www.winwinstore.vn/wp-content/uploads/2021/04/Drone-DJI-Air-2S-5.jpeg') center center/cover no-repeat;
+            }
+
+            /* About Section */
+            .about-section {
+                background-color: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+                margin-top: 30px;
+            }
+
+
+            /* Responsive styling */
+            @media (max-width: 768px) {
+                .about-section .row {
+                    flex-direction: column;
+                    text-align: center;
+                }
+
+                .about-section .col-md-5 img {
+                    width: 100%;
+                }
+            }
+        </style>
+    </th:block>
+</head>
+
+<body>
+<th:block id="main-content">
+    <div class="hero">
+        <h2>Khám Phá Thế Giới DJI</h2>
+    </div>
+
+    <!-- About Section -->
+    <div class="container">
+        <div class="about-section">
+            <h2 class="text-center">Về Chúng Tôi</h2>
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <p>DJI là công ty công nghệ hàng đầu thế giới về thiết bị bay không người lái (drone), chuyên cung cấp các sản phẩm và giải pháp tiên tiến.</p>
+                </div>
+                <div class="col-md-5">
+                    <img src="https://dji-vietnam.vn/wp-content/uploads/2021/01/gioi-thieu-dji-4-764x400.jpg" class="img-fluid rounded shadow" alt="DJI Store Image">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Core Values Section -->
+    <div class="container mt-5 core-values">
+        <h3 class="text-center">Giá Trị Cốt Lõi</h3>
+        <div class="row text-center">
+            <div class="col-md-4 mb-4">
+                <div class="p-4 rounded shadow bg-light">
+                    <h4>Đổi Mới</h4>
+                    <p>Chúng tôi luôn tìm kiếm những giải pháp công nghệ mới để mang lại giá trị tốt nhất cho khách hàng.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4 rounded shadow bg-light">
+                    <h4>Chất Lượng</h4>
+                    <p>Sản phẩm của chúng tôi được chế tạo từ những vật liệu cao cấp, đáp ứng những tiêu chuẩn khắt khe nhất.</p>
+                </div>
+            </div>
+            <div class="col-md-4 mb-4">
+                <div class="p-4 rounded shadow bg-light">
+                    <h4>Tập Trung Vào Khách Hàng</h4>
+                    <p>Khách hàng là trọng tâm của mọi hoạt động, chúng tôi cam kết mang đến trải nghiệm tốt nhất.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block id="js">
+    <script>
+        // Accordion JavaScript
+        document.querySelectorAll('.accordion-header').forEach(header => {
+            header.addEventListener('click', function () {
+                const accordionItem = this.parentElement;
+                accordionItem.classList.toggle('active');
+            });
+        });
+    </script>
+</th:block>
+</body>
+
+</html>

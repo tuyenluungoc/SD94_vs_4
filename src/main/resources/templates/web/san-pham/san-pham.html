@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #main-content}, ~{:: #js})}">
+<head>
+    <title>Sản phẩm</title>
+
+    <th:block id="css">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+              integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+              integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+        <style>
+
+            /*css cho sản phẩm web*/
+
+            .sidebars {
+                top: 0;
+                left: 0;
+                max-width: 25%; /* Width of sidebar */
+                height: 120vh;
+                overflow-y: auto;
+                background-color: #f4f4f4; /* Customize as needed */
+                padding: 20px;
+            }
+
+            .san-pham-all {
+                max-width: 75%;
+            }
+
+            /* Đảm bảo các thẻ sản phẩm căn chỉnh đều */
+            .card-container {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center; /* Căn giữa các sản phẩm nếu không đủ để tạo hàng đầy đủ */
+                gap: 20px;
+                margin-top: 20px;
+            }
+
+            /* Thẻ sản phẩm */
+            .card {
+                flex: 1 1 calc(25% - 20px); /* Chia thành 4 cột, trừ khoảng cách */
+                max-width: 280px; /* Đảm bảo chiều rộng tối đa */
+                min-width: 220px; /* Đảm bảo chiều rộng tối thiểu */
+                height: 380px; /* Chiều cao cố định */
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                overflow: hidden;
+                text-align: center;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                transition: transform 0.3s ease-in-out;
+                background-color: #f9f9f9;
+            }
+
+            /* Hover hiệu ứng cho thẻ sản phẩm */
+            .card:hover {
+                transform: translateY(-10px);
+            }
+
+            /* Hình ảnh của sản phẩm */
+            .card-image {
+                width: 100%;
+                height: 180px;
+                object-fit: cover;
+                border-bottom: 1px solid #ddd;
+            }
+
+            /* Tiêu đề và mô tả */
+            .card-title {
+                font-size: 18px;
+                margin: 15px 10px;
+                font-weight: bold;
+            }
+
+            .card-text {
+                font-size: 14px;
+                margin: 0 10px 15px;
+                color: #555;
+            }
+
+            /* Responsive cho màn hình nhỏ hơn */
+            @media (max-width: 1024px) {
+                .card {
+                    flex: 1 1 calc(33.33% - 20px); /* 3 cột trên màn hình trung bình */
+                }
+            }
+
+            @media (max-width: 768px) {
+                .card {
+                    flex: 1 1 calc(50% - 20px); /* 2 cột trên màn hình nhỏ */
+                }
+            }
+
+            @media (max-width: 480px) {
+                .card {
+                    flex: 1 1 100%; /* 1 cột trên màn hình rất nhỏ */
+                }
+            }
+
+
+            .slide-product {
+                display: flex;
+                /*margin: 5%;*/
+            }
+
+            /*tìm kiếm*/
+
+            .product-container {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+                justify-content: space-between;
+            }
+
+            .product-card {
+                width: calc(33.33% - 20px); /* Chiếm 1/3 chiều rộng của container, trừ khoảng cách */
+                box-sizing: border-box;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                overflow: hidden;
+                background-color: #fff;
+                transition: transform 0.3s, box-shadow 0.3s;
+            }
+
+            .product-card:hover {
+                transform: translateY(-10px); /* Tạo hiệu ứng nổi lên khi hover */
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Đổ bóng khi hover */
+            }
+
+            .product-link {
+                text-decoration: none;
+                color: inherit;
+                display: block;
+            }
+
+            .product-image {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .product-name {
+                padding: 15px;
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: #333;
+            }
+
+            .product-description {
+                padding: 0 15px 15px;
+                font-size: 1rem;
+                color: #555;
+            }
+
+            @media (max-width: 768px) {
+                .product-card {
+                    width: calc(50% - 10px); /* 2 sản phẩm mỗi hàng trên màn hình nhỏ */
+                }
+            }
+
+            @media (max-width: 480px) {
+                .product-card {
+                    width: 100%; /* 1 sản phẩm mỗi hàng trên màn hình rất nhỏ */
+                }
+            }
+
+        </style>
+
+
+    </th:block>
+
+</head>
+<body>
+<th:block id="main-content">
+    <div class="slide-product">
+        <div class="sidebars">
+            <div>
+                <h3>
+                    <h3><strong>Product Series</strong></h3>
+                    <ul class="category-list">
+                        <li><input type="radio" name="product" value="Tat ca" onclick="filterProducts1()" checked> Tất cả
+                        </li>
+                        <li><input type="radio" name="product" value="DJI Mini" onclick="filterProducts()"> DJI Mini
+                        </li>
+                        <li><input type="radio" name="product" value="DJI Mavic" onclick="filterProducts()"> DJI Mavic
+                        </li>
+                        <li><input type="radio" name="product" value="DJI-Inspire" onclick="filterProducts()"> DJI
+                            Inspire
+                        </li>
+                        <li><input type="radio" name="product" value="DJI-Mavic-Air" onclick="filterProducts()"> DJI
+                            MAVIC AIR
+                        </li>
+                        <li><input type="radio" name="product" value="DJI-Fpv" onclick="filterProducts()"> DJI FPV
+                        </li>
+                        <li><input type="radio" name="product" value="DJI-Agras" onclick="filterProducts()"> DJI Agras
+                        </li>
+                        <li><input type="radio" name="product" value="DJI-MIC" onclick="filterProducts()">DJI MIC
+                        </li>
+                        <li><input type="radio" name="product" value="DJI-Osmo-Action" onclick="filterProducts()"> DJI-Osmo-Action
+                        </li>
+                        <li><input type="radio" name="product" value="DJI-Osmo-Mobile" onclick="filterProducts()"> DJI-Osmo-Mobile
+                        </li>
+                        <li><input type="radio" name="product" value="DJI-Poket" onclick="filterProducts()">DJI-Poket
+                        </li>
+                        <li><input type="radio" name="product" value="DJI-Phantom" onclick="filterProducts()">DJI-Phantom
+                        </li>
+                        <li><input type="radio" name="product" value="DJI-RN" onclick="filterProducts()">DJI-RN
+                        </li>
+
+                    </ul>
+                    <h3><strong>Mục Sản Phẩm</strong></h3>
+                    <ul class="category-list">
+                        <li><input type="radio" name="category" id="gimbal"> Gimbal</li>
+                        <li><input type="radio" name="category" id="flycam"> Flycam</li>
+                        <li><input type="radio" name="category" id="fpv"> FPV</li>
+                        <li><input type="radio" name="category" id="microphone"> Microphone</li>
+                        <li><input type="radio" name="category" id="action-camera"> Action Camera</li>
+                        <li><input type="radio" name="category" id="charging-station"> Trạm sạc di động</li>
+                    </ul>
+            </div>
+        </div>
+
+        <div class="san-pham-all">
+
+            <div class="product-container">
+                <div th:each="product : ${products}" class="product-card">
+                    <a th:href="@{/products/{productCode}(productCode=${product.productCode})}" class="product-link">
+                        <img th:src="${product.image}" alt="${product.name}" class="product-image">
+                        <h2 class="product-name" th:text="${product.name}">Tên sản phẩm</h2>
+                        <p class="product-description" th:text="${product.description}">Mô tả</p>
+                    </a>
+                </div>
+            </div>
+
+
+            <div id="DJI-Mini" class="product-section">
+                <h1>DJI MINI</h1>
+                <div class="card-container">
+                    <div th:each="product : ${productsmini}" class="card">
+                        <a th:href="@{/products/{productCode}(productCode=${product.productCode})}" class="card-link">
+                            <img th:src="${product.image}" alt="${product.name}" class="card-image">
+                            <h2 class="card-title" th:text="${product.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${product.description}">Mô tả</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="DJI-Mavic" class="product-section" style="display: none;">
+                <h1>DJI MAVIC</h1>
+                <div class="card-container">
+                    <div th:each="productmavic : ${productsmavic}" class="card">
+                        <a th:href="@{/products/{productCode}(productCode=${productmavic.productCode})}"
+                           class="card-link">
+                            <img th:src="${productmavic.image}" alt="${productmavic.name}" class="card-image">
+                            <h2 class="card-title" th:text="${productmavic.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${productmavic.description}">Mô tả</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+
+            <div id="DJI-Fpv" class="product-section" style="display: none;">
+                <h1>DJI FPV</h1>
+                <div class="card-container" style="justify-content: center;">
+                    <div th:each="productsfpv : ${productsfpv}" class="card" style="width: 37%">
+                        <a th:href="@{/products/{productCode}(productCode=${productsfpv.productCode})}"
+                           class="card-link" style="color: black; text-decoration: none;">
+                            <img th:src="${productsfpv.image}" alt="${product.name}" class="card-image">
+                            <h2 class="card-title" th:text="${productsfpv.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${productsfpv.description} ">Mô tả</p>
+                            <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="DJI-Inspire" class="product-section" style="display: none;">
+                <!-- DJI INS Section -->
+                <h1>DJI Inspire</h1>
+                <div class="card-container" style="flex-wrap: nowrap;justify-content: center;">
+                    <div th:each="productsins : ${productsins}" class="card">
+                        <a th:href="@{/products/{productCode}(productCode=${productsins.productCode})}"
+                           class="card-link" style="color: black; text-decoration: none;">
+                            <img th:src="${productsins.image}" alt="${product.name}" class="card-image">
+                            <h2 class="card-title" th:text="${productsins.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${productsins.description} ">Mô tả</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="DJI-Mavic-Air" class="product-section" style="display: none;">
+                <h1>DJI MAVIC AIR</h1>
+                <div class="card-container" style="flex-wrap: nowrap;justify-content: center;">
+                    <div th:each="productsmar : ${productsmar}" class="card">
+                        <a th:href="@{/products/{productCode}(productCode=${productsmar.productCode})}"
+                           class="card-link" style="color: black; text-decoration: none;">
+                            <img th:src="${productsmar.image}" alt="${product.name}" class="card-image">
+                            <h2 class="card-title" th:text="${productsmar.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${productsmar.description} ">Mô tả</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div id="DJI-Agras" class="product-section" style="display: none;">
+                <h1>DJI Agras</h1>
+                <div class="card-container" style="justify-content: center;">
+                    <div th:each="productsmas : ${productsmas}" class="card" style="width: 37%">
+                        <a th:href="@{/products/{productCode}(productCode=${productsmas.productCode})}"
+                           class="card-link" style="color: black; text-decoration: none;">
+                            <img th:src="${productsmas.image}" alt="${product.name}" class="card-image">
+                            <h2 class="card-title" th:text="${productsmas.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${productsmas.description} ">Mô tả</p>
+                            <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="DJI-MIC" class="product-section" style="display: none;">
+                <h1>DJI MIC</h1>
+                <!--            productmic của djimic chứ ko phải của productmavic-->
+                <div class="card-container" style="justify-content: center;">
+                    <div th:each="productmic : ${productmic}" class="card" style="width: 37%">
+                        <a th:href="@{/products/{productCode}(productCode=${productmic.productCode})}" class="card-link"
+                           style="color: black; text-decoration: none;">
+                            <img th:src="${productmic.image}" alt="${product.name}" class="card-image">
+                            <h2 class="card-title" th:text="${productmic.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${productmic.description} ">Mô tả</p>
+                            <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <!--            productmavic đổi cảằng này ưữaăng sao cho no giong di chu toan productmavic -->
+            <!--            cái t-->
+            <div id="DJI-Osmo-Action" class="product-section" style="display: none;">
+                <h1>DJI Osmo Action</h1>
+                <div class="card-container" style="justify-content: center;">
+                    <div th:each="productsom : ${productsom}" class="card" style="width: 37%">
+                        <a th:href="@{/products/{productCode}(productCode=${productsom.productCode})}" class="card-link"
+                           style="color: black; text-decoration: none;">
+                            <img th:src="${productsom.image}" alt="${product.name}" class="card-image">
+                            <h2 class="card-title" th:text="${productsom.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${productsom.description} ">Mô tả</p>
+                            <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="DJI-Osmo-Mobile" class="product-section" style="display: none;">
+                <h1>DJI Osmo Mobile</h1>
+                <div class="card-container" style="justify-content: center;">
+                    <div th:each="productsomm : ${productsomm}" class="card" style="width: 37%">
+                        <a th:href="@{/products/{productCode}(productCode=${productsomm.productCode})}"
+                           class="card-link" style="color: black; text-decoration: none;">
+                            <img th:src="${productsomm.image}" alt="${product.name}" class="card-image">
+                            <h2 class="card-title" th:text="${productsomm.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${productsomm.description} ">Mô tả</p>
+                            <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="DJI-Poket" class="product-section" style="display: none;">
+                <h1>DJI Poket</h1>
+                <div class="card-container" style="justify-content: center;">
+                    <div th:each="productop : ${productop}" class="card" style="width: 37%">
+                        <a th:href="@{/products/{productCode}(productCode=${productop.productCode})}" class="card-link"
+                           style="color: black; text-decoration: none;">
+                            <img th:src="${productop.image}" alt="${product.name}" class="card-image">
+                            <h2 class="card-title" th:text="${productop.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${productop.description} ">Mô tả</p>
+                            <!--                    <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="DJI-Phantom" class="product-section" style="display: none;">
+                <h1>DJI Phantom </h1>
+                <div class="card-container" style="justify-content: center;">
+                    <div th:each="productpt : ${productpt}" class="card" style="width: 37%">
+                        <a th:href="@{/products/{productCode}(productCode=${productpt.productCode})}" class="card-link"
+                           style="color: black; text-decoration: none;">
+                            <img th:src="${productpt.image}" alt="${product.name}" class="card-image">
+                            <h2 class="card-title" th:text="${productpt.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${productpt.description} ">Mô tả</p>
+                            <!-- <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div id="DJI-RN" class="product-section" style="display: none;">
+                <h1>DJI RN </h1>
+                <div class="card-container" style="justify-content: center;">
+                    <div th:each="productrn : ${productrn}" class="card" style="width: 37%">
+                        <a th:href="@{/products/{productCode}(productCode=${productrn.productCode})}" class="card-link"
+                           style="color: black; text-decoration: none;">
+                            <img th:src="${productrn.image}" alt="${product.name}" class="card-image">
+                            <h2 class="card-title" th:text="${productrn.name}">Tên sản phẩm</h2>
+                            <p class="card-text" th:text="${productrn.description} ">Mô tả</p>
+                            <!-- <p class="card-text" th:text="${product.price} + '₫'">Giá sản phẩm</p>-->
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>
+>
+
+<th:block id="js">
+    <script>
+        function filterProducts() {
+            // Lấy giá trị của radio button được chọn
+            const selectedProduct = document.querySelector('input[name="product"]:checked').value;
+
+            // Ẩn tất cả các phần sản phẩm
+            const sections = document.querySelectorAll('.product-section');
+            sections.forEach(section => section.style.display = 'none');
+
+            // Hiển thị phần sản phẩm tương ứng với lựa chọn
+            const selectedSection = document.getElementById(selectedProduct.replace(/\s+/g, '-'));
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+            }
+
+        }
+
+        function filterProducts1() {
+            const sections = document.querySelectorAll('.product-section');
+            sections.forEach(section => section.style.display = 'block');
+        }
+    </script>
+</th:block>
+</body>
+</html>

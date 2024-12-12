@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<th:block id="css">
+    <style>
+        /* Đặt khung hiển thị ở giữa màn hình */
+        .notification-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60%; /* Độ rộng của bảng */
+            background-color: orangered;  /* Nền trắng */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng mềm */
+            border-radius: 10px; /* Góc bo tròn */
+            padding: 20px;
+            text-align: center;
+        }
+
+        /* Tiêu đề */
+        .notification-container h3 {
+            margin-bottom: 20px;
+            font-size: 1.6em;
+            color: #4a4a4a; /* Xám đậm */
+        }
+
+        /* Bảng */
+        .notification-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        /* Đầu bảng */
+        .notification-table thead {
+            background-color: #6c757d; /* Xám nhạt */
+            color: red; /* Chữ trắng */
+            font-weight: bold;
+        }
+
+        .notification-table th {
+            padding: 12px;
+            text-align: left;
+            font-size: 1em;
+        }
+
+        /* Dữ liệu bảng */
+        .notification-table td {
+            padding: 12px;
+            border-bottom: 1px solid #e9ecef; /* Xám rất nhạt */
+            text-align: left;
+            color: #495057; /* Xám tối */
+        }
+
+        /* Hàng lẻ màu xanh nhạt */
+        .notification-table tr:nth-child(odd) {
+            background-color: #f8f9fa; /* Xám nhạt */
+        }
+
+        /* Hàng chẵn */
+        .notification-table tr:nth-child(even) {
+            background-color: #e9ecef; /* Xám sáng hơn */
+        }
+
+        /* Hiệu ứng hover */
+        .notification-table tr:hover {
+            background-color: #d4edda; /* Xanh nhạt (thân thiện) */
+        }
+
+        /* Căn chỉnh bảng cho di động */
+        @media (max-width: 768px) {
+            .notification-container {
+                width: 90%;
+                padding: 15px;
+            }
+
+            .notification-table th,
+            .notification-table td {
+                padding: 10px;
+                font-size: 0.9em;
+            }
+        }
+
+    </style>
+</th:block>
+<body>
+<div>
+<!-- Modal hiển thị thông báo -->
+    <div class="notification-container">
+        <h3>Thông báo</h3>
+        <table class="notification-table">
+            <thead>
+            <tr>
+                <th>Loại</th>
+                <th>Trạng thái</th>
+                <th>Mã liên quan</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="notification : ${notifications}">
+                <td th:text="${notification?.shoppingCartCode != null ? 'Đơn hàng' : 'Bảo hành'}"></td>
+                <td th:text="${notification?.nameStatus}"></td>
+                <td th:text="${notification?.shoppingCartCode != null ? notification.shoppingCartCode : notification?.statusCode}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <a href="/">Quay lại trang chủ</a>
+</div>
+</body>
+</html>

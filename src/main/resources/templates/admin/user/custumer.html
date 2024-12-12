@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+    <title>Tất cả khách hàng</title>
+
+    <th:block id="css">
+        <style>
+            .customer-form {
+                display: none; /* Ẩn form khi không cần thiết */
+                background-color: white;
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+                position: fixed;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                width: 400px;
+                z-index: 9999;
+            }
+
+            .customer-form h2 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .customer-form label {
+                display: block;
+                margin: 10px 0 5px;
+            }
+
+            .customer-form input,
+            .customer-form textarea {
+                width: 100%;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+            }
+
+            .btn-submit {
+                display: flex;
+                justify-content: space-between;
+                margin-top: 15px;
+            }
+
+            .btn-submit button {
+                padding: 10px 15px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+            }
+
+            .btn-submit .save-button {
+                background-color: #007bff;
+                color: white;
+            }
+
+            .btn-submit .close-button {
+                background-color: #dc3545;
+                color: white;
+            }
+
+            .btn-submit .save-button:hover {
+                background-color: #0056b3;
+            }
+
+            .btn-submit .close-button:hover {
+                background-color: #c82333;
+            }
+            .add-button{
+                background-color: #0c84ff;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .add-button :hover {
+                background-color: #e63946; /* Màu đỏ đậm hơn khi hover */
+                transform: translateY(-2px);
+
+            }
+            .btn-xoa{
+                background-color: red;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            .add-button:hover {
+                background-color: #e63946; /* Màu đỏ đậm hơn khi hover */
+                transform: translateY(-2px);
+
+            }
+
+            /* Nút "Chi tiết" */
+            .btn-detail {
+                background-color: #3498db;
+
+                color: white;
+                border: none;
+                border-radius: 8px;
+                font-size: 16px;
+                font-weight: bold;
+                cursor: pointer;
+                transition: background-color 0.3s ease, transform 0.2s ease;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .btn-detail:hover {
+                background-color: #2980b9;
+            }
+
+            /* Nút "Đóng" */
+            .btn-close {
+                background-color: #e74c3c;
+                color: white;
+                padding: 8px 16px;
+                border: none;
+                border-radius: 5px;
+                cursor: pointer;
+                margin-top: 20px;
+            }
+
+            .btn-close:hover {
+                background-color: #c0392b;
+            }
+
+            /* Hộp thông tin khách hàng */
+            .thong-tin-chi-tiet {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: #f7f7f7;
+                padding: 20px;
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                max-width: 400px;
+                width: 80%;
+                z-index: 1000;
+            }
+
+            .thong-tin-chi-tiet h2 {
+                margin-top: 0;
+                text-align: center;
+            }
+
+            .thong-tin-chi-tiet p {
+                font-size: 14px;
+                margin: 5px 0;
+            }
+            .form-container {
+                width: 450px;
+                margin: 20px auto;
+                padding: 20px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #f9f9f9;
+            }
+
+            .form-group {
+                display: flex;
+                align-items: center;
+                margin-bottom: 15px;
+            }
+
+            .form-label {
+                width: 150px;
+                font-weight: bold;
+                text-align: left;
+                margin-right: 10px;
+            }
+
+            .form-input {
+                width: 100%;
+                padding: 8px;
+                border: 1px solid #ccc;
+                border-radius: 4px;
+                box-sizing: border-box;
+            }
+
+            .save-button {
+                display: block;
+                width: 100%;
+                padding: 10px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 4px;
+                cursor: pointer;
+                font-size: 16px;
+                margin-top: 20px;
+            }
+
+            .save-button:hover {
+                background-color: #0056b3;
+            }
+
+        </style>
+    </th:block>
+</head>
+<style>
+</style>
+<body>
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Danh sách người dùng
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row py-2">
+                <div class="col-12">
+                    <a href="/admin/custumer" type="button" class="btn btn-info">
+                        <i class="fas fa-redo"></i> Refresh
+                    </a>
+<!--                    <div class="add-customer">-->
+<!--                        <button class="add-button" onclick="toggleCustomerForm()">+ Thêm Khách Hàng</button>-->
+<!--                    </div>-->
+                </div>
+            </div>
+
+            <div id="customer-form" class="customer-form" style="display:none;">
+                <h2>Thêm Khách Hàng Mới</h2>
+                <form id="addCustomerForm" th:action="@{/admin/custumer/them-khach-hang}" method="post" enctype="application/x-www-form-urlencoded">
+                    <label for="customer_name">Tên Khách Hàng</label>
+                    <input type="text" id="customer_name" name="name" required>
+
+                    <label for="customer_email">Email Khách Hàng</label>
+                    <input type="email" id="customer_email" name="email" required oninput="checkEmail()">
+                    <span id="emailError" style="color: red; display: none;">Email đã được sử dụng</span>
+
+                    <label for="customer_password">Mật Khẩu</label>
+                    <input type="password" id="customer_password" name="password" required>
+
+                    <label for="customer_phone">Số Điện Thoại</label>
+                    <input type="tel" id="customer_phone" name="sdt" required>
+
+                    <label for="customer_address">Địa Chỉ</label>
+                    <textarea id="customer_address" name="address" rows="2" required></textarea>
+
+                    <div class="btn-submit">
+                        <button type="submit" class="save-button">Lưu Khách Hàng</button>
+                        <button type="button" class="close-button" onclick="toggleCustomerForm()">Đóng</button>
+                    </div>
+                </form>
+
+            </div>
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="table-user" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Tên</th>
+                                    <th>Email</th>
+                                    <th>Số Điện Thoại</th>
+                                    <th>Địa Chỉ</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="user : ${users}">
+                                    <td>
+                                        <a th:href="@{/admin/users/{id}/detail (id=${user.userCode})}"
+                                           th:text="${user.name}"></a>
+                                    </td>
+                                    <td th:text="${user.email}"></td>
+                                    <td th:text="${user.sdt}"></td>
+                                    <td th:text="${user.address}"></td>
+                                    <td>
+                                        <!--                                        <form method="post" th:action="@{/admin/custumer/deleteUser}">-->
+                                        <!--                                            <input type="hidden" name="userCode" th:value="${user.userCode}"/>-->
+                                        <!--                                            <button class="btn-xoa" type="submit">Xoá</button>-->
+                                        <!--                                        </form>-->
+                                        <button class="btn-detail" th:attr="data-id=${user.userCode}">Chi tiết</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="customerDetail" class="thong-tin-chi-tiet" style="display: none;">
+                            <h2>Thông tin khách hàng</h2>
+                            <div id="userInfo">
+                                <!-- Dữ liệu sẽ được cập nhật qua JavaScript -->
+                            </div>
+                            <button id="closeButton" class="btn-close">Đóng</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<th:block id="js">
+    <script th:inline="javascript">
+        $('#table-user').DataTable({
+            "paging": true,
+            "lengthChange": true,
+            "searching": true,
+            "ordering": true,
+            "info": true,
+            "autoWidth": false,
+            "responsive": true,
+        });
+
+        function toggleCustomerForm() {
+            const form = document.getElementById('customer-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+            if (form.style.display === 'block') {
+                clearForm();
+            }
+        }
+
+        function clearForm() {
+            document.getElementById('addCustomerForm').reset();
+        }
+
+        window.onload = function () {
+            const detailButtons = document.querySelectorAll(".btn-detail");
+            const customerDetail = document.getElementById("customerDetail");
+            const closeButton = document.getElementById("closeButton");
+            const userInfoDiv = document.getElementById("userInfo");
+
+            detailButtons.forEach(button => {
+                button.addEventListener("click", async function () {
+                    const userCode = button.getAttribute("data-id");
+                    try {
+                        const response = await fetch(`/admin/custumer/detail/${userCode}`);
+                        if (response.ok) {
+                            const user = await response.json();
+                            userInfoDiv.innerHTML = `
+  <form action="/admin/custumer/update/${user.userCode}" method="post" class="form-container" enctype="application/x-www-form-urlencoded">
+    <p><strong>Mã khách hàng:</strong> ${user.userCode}</p>
+
+    <div class="form-group">
+        <label for="customer_name" class="form-label">Tên Khách Hàng</label>
+        <input type="text" id="customer_name" name="name" value="${user.name}" class="form-input" required>
+    </div>
+
+    <div class="form-group">
+        <label for="customer_email" class="form-label">Email Khách Hàng</label>
+        <input type="email" id="customer_email" name="email" value="${user.email}" class="form-input" required>
+    </div>
+
+    <div class="form-group">
+        <label for="customer_password" class="form-label">Mật Khẩu</label>
+        <input type="password" id="customer_password" name="password" value="${user.password}" class="form-input" required>
+    </div>
+
+    <div class="form-group">
+        <label for="customer_phone" class="form-label">Số Điện Thoại</label>
+        <input type="tel" id="customer_phone" name="sdt" value="${user.sdt}" class="form-input" required>
+    </div>
+
+    <div class="form-group">
+        <label for="customer_address" class="form-label">Địa Chỉ</label>
+        <input type="text" id="customer_address" name="address" value="${user.address}" class="form-input" required>
+    </div>
+
+    <p><strong>Vai trò:</strong> ${user.role}</p>
+    <button type="submit" class="save-button">Lưu Khách Hàng</button>
+</form>
+
+`;
+
+                            customerDetail.style.display = "block";
+                        } else {
+                            console.error("Không tìm thấy khách hàng với mã:", userCode);
+                        }
+                    } catch (error) {
+                        console.error("Lỗi khi lấy thông tin khách hàng:", error);
+                    }
+                });
+            });
+
+            closeButton.addEventListener("click", function () {
+                customerDetail.style.display = "none";
+            });
+        };
+        // checkEmail()
+        let debounceTimeout;
+
+        async function checkEmail() {
+            const emailInput = document.getElementById("customer_email");
+            const emailError = document.getElementById("emailError");
+            const email = emailInput.value.trim();
+
+            // Xóa thông báo lỗi và trạng thái nếu email rỗng
+            if (!email) {
+                emailError.style.display = "none";
+                emailInput.setCustomValidity("");
+                return;
+            }
+
+            // Sử dụng debounce để giảm số lần gọi API
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(async () => {
+                try {
+                    const response = await fetch(`/admin/custumer/check-email?email=${encodeURIComponent(email)}`);
+                    const isEmailExists = await response.json();
+
+                    if (isEmailExists) {
+                        emailError.style.display = "block";
+                        emailError.textContent = "Email đã được sử dụng";
+                        emailInput.setCustomValidity("Email đã được sử dụng");
+                    } else {
+                        emailError.style.display = "none";
+                        emailInput.setCustomValidity("");
+                    }
+                } catch (error) {
+                    console.error("Lỗi khi kiểm tra email:", error);
+                    emailError.style.display = "block";
+                    emailError.textContent = "Không thể kiểm tra email, vui lòng thử lại sau.";
+                    emailInput.setCustomValidity("Lỗi kiểm tra email");
+                }
+            }, 500); // Kiểm tra sau 500ms khi người dùng dừng gõ
+        }
+
+
+    </script>
+</th:block>
+
+</body>
+</html>

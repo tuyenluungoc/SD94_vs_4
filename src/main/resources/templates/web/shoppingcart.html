@@ -1,0 +1,252 @@
+
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #main-content}, ~{:: #js})}">
+<head>
+    <title>Trang chủ</title>
+
+    <th:block id="css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+              integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+              integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+
+    </th:block>
+
+</head>
+<body>
+<th:block id="main-content">
+    <div class="container my-5">
+        <a id="historyButton" class="btn btn-secondary btn-lg ms-2" role="button" href="#" data-bs-toggle="modal" data-bs-target="#orderHistoryModal">Lịch sử đặt hàng</a>
+
+        <!-- Modal Lịch Sử Đặt Hàng -->
+        <div class="modal fade" id="orderHistoryModal" tabindex="-1" aria-labelledby="orderHistoryModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="orderHistoryModalLabel">Lịch Sử Đặt Hàng</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table table-bordered">
+                            <thead class="table-light">
+                            <tr>
+                                <th>Mã Đơn Hàng</th>
+                                <th>Ngày Tạo</th>
+                                <th>Tổng Tiền</th>
+                                <th>Trạng Thái</th>
+                                <th>Chi Tiết</th>
+                            </tr>
+                            </thead>
+                            <tbody id="orderHistoryTableBody">
+                            <th:block th:each="order : ${orders}">
+                                <tr>
+                                    <td th:text="${order.orderCode}">Order Code</td>
+                                    <td th:text="${#dates.format(order.createdAt, 'dd/MM/yyyy')}">Creation Date</td>
+                                    <td th:text="${order.totalAmountMoney}">Total Amount</td>
+                                    <td th:text="${order.status ? 'Đã duyệt' : 'Chưa duyệt'}">Status</td>
+                                    <td>
+                                        <a th:href="@{'/order/detail/' + ${order.orderCode}}" class="btn btn-primary">Chi Tiết</a>
+                                    </td>
+                                </tr>
+                            </th:block>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <h2 class="text-center mb-4">Giỏ Hàng Của Bạn</h2>
+        <div class="table-responsive">
+            <table class="table table-bordered cart-table">
+                <thead class="table-light">
+                <tr>
+                    <th>Sản Phẩm</th>
+                    <th>Giá</th>
+                    <th>Số Lượng</th>
+                    <th>Tổng Cộng</th>
+                    <th>THAO TÁC</th>
+
+                </tr>
+                </thead>
+                <tbody>
+                <th:block th:each="shoppingCartProduct : ${shoppingCartProducts}">
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <img th:src="@{${shoppingCartProduct.product.image}}" alt="Sản phẩm" class="img-thumbnail" style="width: 60px; height: 60px;">
+                                <p class="ms-3 mb-0" th:text="${shoppingCartProduct.product.name}">Sản phẩm</p>
+                            </div>
+                        </td>
+                        <td th:text="${shoppingCartProduct.price} + ' VND'">0 VND</td>
+                        <td th:text="${shoppingCartProduct.amount}">1</td>
+                        <td th:text="${shoppingCartProduct.price * shoppingCartProduct.amount} + ' VND'">0 VND</td>
+<!--                        <td>${#numbers.formatCurrency(shoppingCartProduct.price * shoppingCartProduct.amount)}-->
+                        <td>
+                            <form th:action="@{/delete-cart-item}" method="post" style="display: inline;">
+                                <input type="hidden" name="productCode" th:value="${shoppingCartProduct.product.productCode}" /> <!-- Sử dụng productCode -->
+                                <button type="submit" class="btn btn-warning btn-lg">Xóa</button>
+                            </form>
+                        </td>
+                    </tr>
+                    <input type="hidden" id="shoppingCartCode" th:value="${shoppingCartProduct.shoppingCart.shoppingCartCode}">
+                    <input type="hidden" id="productId" th:value="${shoppingCartProduct.product.productCode}">
+
+                    <th:block th:each="user : ${user}">
+                        <input type="hidden" id="userCode" th:value="${user.userCode}">
+                        <input type="hidden" id="shippingAddress" th:value="${user.address}">
+                    </th:block>
+                </th:block>
+
+                </tbody>
+                <tr>
+                    <td colspan="3" class="text-end"><strong>Tổng Cộng:</strong></td>
+                    <td th:text="${totalAmount} + ' VND'" id="totalAmountM">0 VND</td>
+                </tr>
+
+            </table>
+
+            <a id="paymentButton" class="btn btn-primary btn-lg" role="button">Thanh toán</a>
+            <a id="ClearButton"  class="btn btn-warning btn-lg" role="button" href="/clear-cart">Clear</a>
+            <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="paymentModalLabel">Xác Nhận Thông Tin</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form id="paymentForm">
+                                <div class="mb-3">
+                                    <label for="userName" class="form-label">Họ tên:</label>
+                                    <input type="text" id="userName" class="form-control" th:value="${user.name}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="userPhone" class="form-label">Số điện thoại:</label>
+                                    <input type="text" id="userPhone" class="form-control" th:value="${user.getSdt()}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="shippingAddress" class="form-label">Địa chỉ:</label>
+                                    <input type="text" id="shippingAddress1" class="form-control" th:value="${user.address}">
+                                </div>
+                                <div class="mb-3">
+                                    <label class="form-label">Phương thức thanh toán:</label>
+                                    <div>
+                                        <input type="radio" id="paymentMethodTransfer" name="paymentMethod" value="transfer" checked>
+                                        <label for="paymentMethodTransfer">Chuyển khoản</label>
+                                        <br>
+                                        <input type="radio" id="paymentMethodCash" name="paymentMethod" value="cash">
+                                        <label for="paymentMethodCash">Tiền mặt</label>
+                                    </div>
+                                </div>
+
+                                <div id="depositAmount" class="mb-3 text-danger" style="display: none;">
+                                    <strong>Số tiền đặt cọc:</strong> <span id="depositValue">0</span> VND
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" id="confirmPayment" class="btn btn-primary">Xác nhận thanh toán</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+        <script>
+            document.getElementById('paymentButton').addEventListener('click', function () {
+                // Hiển thị modal
+                const paymentModal = new bootstrap.Modal(document.getElementById('paymentModal'));
+                paymentModal.show();
+
+                // Xử lý sự kiện chọn phương thức thanh toán
+                const paymentMethodInputs = document.querySelectorAll('input[name="paymentMethod"]');
+                const depositSection = document.getElementById('depositAmount');
+                const depositValueElement = document.getElementById('depositValue'); // Lấy phần tử HTML
+                const totalAmount = parseFloat(document.getElementById('totalAmountM').textContent.replace(/[^0-9.-]+/g, "")); // Tổng tiền
+
+                paymentMethodInputs.forEach(input => {
+                    input.addEventListener('change', function () {
+                        if (this.value === 'cash') {
+                            let deposit = 0;
+                            if (totalAmount < 50000) deposit = 20000;
+                            else if (totalAmount < 100000) deposit = 50000;
+                            else if (totalAmount < 500000) deposit = 100000;
+                            else if (totalAmount < 1000000) deposit = 150000;
+                            else deposit = 200000;
+
+                            depositValueElement.textContent = deposit; // Cập nhật số tiền cọc
+                            depositSection.style.display = 'block'; // Hiển thị phần cọc
+                        } else {
+                            depositSection.style.display = 'none'; // Ẩn phần cọc
+                        }
+                    });
+                });
+
+                // Xác nhận thanh toán
+                document.getElementById('confirmPayment').addEventListener('click', function () {
+                    const shippingAddress = document.getElementById('shippingAddress1').value;
+                    const paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+
+                    // Ép kiểu giá trị tiền đặt cọc từ textContent sang số
+                    const depositAmount = parseFloat(depositValueElement.textContent.replace(/[^0-9.-]+/g, ""));
+
+                    const billData = {
+                        userCode: document.getElementById('userCode').value,
+                        fromShoppingCartCode: document.getElementById('shoppingCartCode').value,
+                        shippingAddress: shippingAddress,
+                        totalAmountMoney: totalAmount,
+                        paymentServiceCode: paymentMethod === 'transfer' ? 'VNPay' : 'Cash',
+                        status: false,
+                    };
+
+                    console.log(billData); // Debug
+
+                    fetch('/add-oder', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(billData)
+                    })
+                        .then(response => response.json())
+                        .then(() => {
+                            if (paymentMethod === 'transfer') {
+                                window.location.href = `/api/payment/create_payment?amount=${totalAmount}&id=${billData.fromShoppingCartCode}`;
+                            } else {
+                                window.location.href = `/api/payment/create_payment?amount=${depositAmount}&id=${billData.fromShoppingCartCode}`;
+                                alert('Xác nhận thanh toán chuyển khoản tiền cọc');
+                            }
+                        })
+                        .catch(error => {
+                            console.error('Có lỗi xảy ra:', error);
+                        });
+                });
+            });
+        </script>
+
+    <th:block id="js">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+                integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+                crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+    </th:block>
+
+
+
+
+</th:block>
+
+</body>
+</html>

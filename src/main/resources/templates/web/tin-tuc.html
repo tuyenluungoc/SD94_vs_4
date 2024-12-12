@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #main-content}, ~{:: #js})}">
+<head>
+    <title>Bảo hành</title>
+
+    <th:block id="css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+              integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+              integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+
+        <!--        <link rel="stylesheet" th:href="@{/static/web/css/bao-hanh.css}">-->
+
+
+</head>
+
+<body>
+<th:block id="main-content">
+    <div class="container">
+        <div class="main-grid">
+            <!-- Phần bài viết chính -->
+            <div class="main-news">
+                <img src="img/action-5-pro-vs-action-4.jpg" alt="Main News">
+                <h2>So Sánh DJI Action 5 Pro Vs DJI Action 4</h2>
+            </div>
+
+            <!-- Phần bài viết bên cạnh -->
+            <div class="sidebar-news">
+                <article>
+                    <img src="img/Review-DJI-Mini-4K-2.jpg" alt="News 1">
+                    <h3>Đánh Giá DJI Mini 4K</h3>
+                </article>
+                <article>
+                    <img src="img/che-do-quickshot-tren-drone-dji.jpg" alt="News 2">
+                    <h3>Giới Thiệu Chế Độ Quickshot</h3>
+                </article>
+            </div>
+        </div>
+
+        <div class="card-container"style="flex-wrap: nowrap;justify-content: center;">
+            <div class="card">
+                <img src="img/5-meo-su-dung-Gimbal-tren-dien-thoai-di-dong-cho-nguoi-moi-bat-dau.png" alt="5 mẹo sử dụng Gimbal" class="card-image">
+                <h2 class="card-title">5 mẹo sử dụng Gimbal trên điện thoại di động</h2>
+                <p class="card-text">Nếu bạn chỉ có một chiếc điện thoại và muốn quay video hành trình du lịch của mình...</p>
+            </div>
+            <div class="card">
+                <img src="img/mo-hop-dji-om-5-ava.jpg" alt="DJI OM5" class="card-image">
+                <h2 class="card-title">Mở hộp DJI OM5 – Những cải tiến của DJI OM 5 vs DJI OM 4</h2>
+                <p class="card-text">Gimbal DJI OM 5 hiện nay là chủ đề quan tâm nhất của những người yêu thích công nghệ...</p>
+            </div>
+            <div class="card">
+                <img src="img/Osmo-Action-9.png" alt="Osmo Action" class="card-image">
+                <h2 class="card-title">Bản cập nhật Firmware của Osmo Action có điểm gì mới?</h2>
+                <p class="card-text">Osmo Action là camera hành động được DJI ra mắt vào năm 2019 với nhiều điểm nổi trội...</p>
+            </div>
+        </div>
+    </div>
+</th:block>
+<th:block id="js">
+
+</th:block>
+</body>
+
+</html>
+
+

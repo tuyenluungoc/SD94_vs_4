@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{web/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: #main-content}, ~{:: #js})}">
+<head>
+    <title>Trang chủ</title>
+
+    <th:block id="css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"
+              integrity="sha512-tS3S5qG0BlhnQROyJXvNjeEM4UpMXHrQfTGmbQ1gKmelCxlSEBUaxhRBj/EFTzpbP4RVSrpEikbmdJobCvhE3g=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"
+              integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
+              crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    </th:block>
+</head>
+<body>
+<th:block id="main-content">
+    <div class="product-detail-container">
+        <!-- Kiểm tra xem sản phẩm và chi tiết sản phẩm có tồn tại hay không -->
+        <div th:if="${detailedProduct != null}">
+            <div class="product-image">
+                <!-- Hiển thị hình ảnh sản phẩm -->
+                <img th:src="@{${product.image}}" alt="Hình ảnh sản phẩm" class="product-img">
+            </div>
+            <div class="product-info">
+                <h1 th:text="${product.name}">Tên sản phẩm</h1>
+                <h3 th:text="${product.productType.productTypeName}">Danh mục</h3>
+                <p th:text="${detailedProduct.description}">Mô tả sản phẩm</p>
+                <div class="price">
+                    <p>Giá: <span th:text="${#numbers.formatCurrency(detailedProduct.priceVND)}">Giá sản phẩm</span> VND</p>
+                </div>
+                <div class="quantity">
+                    <p>Số lượng còn lại: <span th:text="${detailedProduct.quantity}">Số lượng</span></p>
+                </div>
+                <div class="product-dates">
+                    <p>Ngày tạo: <span th:text="${#dates.format(detailedProduct.date, 'dd/MM/yyyy')}">Ngày tạo</span></p>
+                    <p>Ngày cập nhật: <span th:text="${#dates.format(detailedProduct.editDate, 'dd/MM/yyyy')}">Ngày cập nhật</span></p>
+                </div>
+                <div class="add-to-cart">
+                    <form th:action="@{/add-to-cart}" method="post">
+                        <input type="hidden" name="productCode" th:value="${product.productCode}" />
+                        <input type="number" name="amount" min="1" value="1" placeholder="Số lượng" required />
+                        <button type="submit">Thêm vào giỏ hàng</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Nếu không tìm thấy chi tiết sản phẩm -->
+        <div th:if="${detailedProduct == null}">
+            <p>Không tìm thấy chi tiết sản phẩm.</p>
+        </div>
+    </div>
+
+    <!-- Link quay lại trang chủ -->
+    <div class="back-to-home">
+        <a href="/" class="btn btn-primary">Quay lại trang chủ</a>
+    </div>
+
+</th:block>
+<th:block id="js">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"
+            integrity="sha512-bPs7Ae6pVvhOSiIcyUClR7/q2OAsRiovw4vAkX+zJbw3ShAeeqezq50RIIcIURq7Oa20rW2n2q+fyXBNcU9lrw=="
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        $(document).ready(function () {
+            $(".movie-list").owlCarousel({
+                items: 4,
+                margin: 20,
+                loop: true
+            });
+        });
+    </script>
+    <script>
+        let slideIndex = 0;
+        showSlides();
+
+        function showSlides() {
+            let slides = document.getElementsByClassName("slides");
+            let dots = document.getElementsByClassName("dot");
+
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+
+            slideIndex++;
+            if (slideIndex > slides.length) {
+                slideIndex = 1;
+            }
+
+            for (let i = 0; i < dots.length; i++) {
+                dots[i].className = dots[i].className.replace(" active", "");
+            }
+
+            slides[slideIndex-1].style.display = "block";
+            dots[slideIndex-1].className += " active";
+
+            setTimeout(showSlides, 3000); // Change slide every 3 seconds
+        }
+
+        function currentSlide(n) {
+            slideIndex = n;
+            showSlides();
+        }
+    </script>
+</th:block>
+</body>
+</html>
