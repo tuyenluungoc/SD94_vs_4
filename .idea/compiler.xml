@@ -2,16 +2,21 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="sd_94vs1" />
+        <module name="SD94_vs_4" />
+        <module name="sd94_vs_4" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="SD94_vs_4" options="-parameters" />
+      <module name="sd94_vs_4" options="-parameters" />
       <module name="sd_94vs1" options="-parameters" />
     </option>
   </component>

@@ -61,7 +61,7 @@ body {
 }
 
 .menu li a {
-    color: #333; /* Màu chữ */
+    color: #fff; /* Màu chữ */
     text-decoration: none;
     font-size: 14px; /* Kích thước chữ nhỏ hơn */
     font-weight: 500;
@@ -310,6 +310,7 @@ nav div {
 
 /* Đảm bảo thẻ h1 có khoảng cách trên */
 h1 {
+    color: #fff;
     font-size: 2rem;
     text-align: center;
     margin: 30px 0;
