@@ -19,6 +19,9 @@ public class UserRequest {
     private String password;
 //    private String avatar;
     private String sdt;
+    private String province;
+    private String district;
+    private String town;
     private String address;
     private UserRole role;
 

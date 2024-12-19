@@ -14,6 +14,9 @@ public class RegisterRequest {
     String email;
     String password;
     String confirmPassword;
+    String province;
+    String district;
+    String town;
     String address;
     String sdt;
 }
