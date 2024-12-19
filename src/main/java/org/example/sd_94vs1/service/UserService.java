@@ -33,6 +33,9 @@ public class UserService {
         user.setPassword(userDTO.getPassword());
 //        user.setAvatar(userDTO.getAvatar());
         user.setSdt(userDTO.getSdt());
+        user.setProvince(userDTO.getProvince());
+        user.setDistrict(userDTO.getDistrict());
+        user.setTown(userDTO.getTown());
         user.setAddress(userDTO.getAddress());
         if (userDTO.getRole() == null) {
             user.setRole(UserRole.USER);
