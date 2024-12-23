@@ -5,186 +5,7 @@
     <title>Title</title>
 
 </head>
-<th:block id="css">
-    <style>
-        /* Đặt kiểu cơ bản cho toàn bộ tài liệu */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
 
-        /* Navbar styling */
-        .navbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            background-color: #333;
-            padding: 10px 20px;
-            color: white;
-        }
-
-        .logo img {
-            max-width: 80px;
-        }
-
-        .menu {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            display: flex;
-            gap: 15px;
-        }
-
-        .menu li a {
-            text-decoration: none;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 4px;
-            transition: background-color 0.3s ease;
-        }
-
-        .menu li a:hover {
-            background-color:#edf4ff ;
-        }
-
-        .search-cart {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .search-cart form {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .search-cart input {
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        .search-cart button {
-            background-color: #444;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 4px;
-            cursor: pointer;
-        }
-
-        .search-cart button:hover {
-            background-color: #575757;
-        }
-
-        .notification-badge {
-            background-color: red;
-            color: white;
-            font-size: 12px;
-            padding: 2px 5px;
-            border-radius: 50%;
-            position: absolute;
-            top: -5px;
-            right: -10px;
-        }
-
-        /* Modal styling */
-        .modal {
-            display: none; /* Hidden by default */
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4); /* Dimmed background */
-        }
-
-        .modal-content {
-            background-color: #fff;
-            margin: 10% auto;
-            padding: 20px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            text-align: center;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .close-button {
-            position: absolute;
-            top: 10px;
-            right: 15px;
-            font-size: 20px;
-            color: #aaa;
-            cursor: pointer;
-        }
-
-        .close-button:hover {
-            color: black;
-        }
-
-        #notificationList li {
-            text-align: left;
-            margin: 10px 0;
-            padding: 10px;
-            background: #f9f9f9;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-
-        /* Responsive styling */
-        @media (max-width: 768px) {
-            .navbar {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .menu {
-                flex-direction: column;
-                width: 100%;
-            }
-
-            .menu li {
-                width: 100%;
-            }
-
-            .search-cart {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 10px;
-            }
-
-            .modal-content {
-                margin: 20% auto;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .navbar {
-                padding: 10px;
-            }
-
-            .menu {
-                font-size: 14px;
-            }
-
-            .search-cart button {
-                font-size: 12px;
-                padding: 5px 8px;
-            }
-
-            .modal-content {
-                width: 95%;
-                padding: 15px;
-            }
-        }
-    </style>
-</th:block>
 
 <body>
 <header class="header">
@@ -197,15 +18,26 @@
                 <li><a href="/gioi-thieu">Giới Thiệu</a></li>
                 <li><a href="/san-pham">Sản Phẩm</a></li>
                 <li><a href="/huong-dan-mua-hang">Hướng Dẫn Mua Hàng</a></li>
-                <li><a href="/bao-hanh">Dịch Vụ Bảo Hành</a></li>
+                <li><a href="/bao-hanh">Bảo Hành</a></li>
                 <li><a href="/tin-tuc">Tin Tức</a></li>
                 <li><a href="/lien-he">Liên Hệ</a></li>
+                <li><a href="/chatus">kênh thế giới</a></li>
             </ul>
             <div class="search-cart">
-                <input type="text" placeholder="Tìm kiếm">
-                <i class="fas fa-search"></i>
+                <form id="searchForm" action="/search" method="GET">
+                    <input type="text" name="query" placeholder="Tìm kiếm" id="searchInput">
+                    <button type="submit" id="searchButton">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
                 <a href="/own-shoppingcart"><i class="fas fa-shopping-cart"></i></a>
+                <a href="/notifications" class="notification" id="notificationIcon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge"></span>
+                </a>
             </div>
+
+
         </div>
         <div>
             <div th:if="${session.currentUser == null}">
