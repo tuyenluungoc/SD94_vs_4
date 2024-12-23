@@ -16,24 +16,25 @@ body {
 
 /* Container chính */
 .container {
-    width: 90%;
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
 }
 
 
 /* Container chứa toàn bộ header */
 .header {
     background-color: #fff; /* Màu nền của header */
-    padding: 10px 0; /* Khoảng cách trên dưới */
+    padding: 2px 0; /* Khoảng cách trên dưới */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Để header có chút đổ bóng */
 }
 
 /* Navbar chính */
 .navbar {
     display: flex;
-    justify-content: space-between;
+    /*justify-content: space-between;*/
+    flex-wrap: nowrap;
     align-items: center;
     width: 100%;
     max-width: 1200px; /* Giới hạn chiều rộng max của navbar */
@@ -63,7 +64,7 @@ body {
 .menu li a {
     color: #fff; /* Màu chữ */
     text-decoration: none;
-    font-size: 14px; /* Kích thước chữ nhỏ hơn */
+    font-size: 12px; /* Kích thước chữ nhỏ hơn */
     font-weight: 500;
 }
 
@@ -78,8 +79,9 @@ body {
 }
 
 #searchInput {
-    padding: 5px;
-    font-size: 14px;
+    width: 150px; /* Giảm chiều rộng */
+    padding: 3px; /* Giảm padding */
+    font-size: 12px; /* Giảm kích thước font */
     border-radius: 5px;
     border: 1px solid #ccc;
     margin-right: 10px;
@@ -87,7 +89,7 @@ body {
 
 .search-cart button {
     padding: 5px 10px;
-    background-color: #007bff;
+    background: none;
     color: white;
     border: none;
     border-radius: 5px;
@@ -98,6 +100,17 @@ body {
     background-color: #0056b3;
 }
 
+.search-cart i {
+    margin-left: 10px; /* Giãn cách biểu tượng khỏi input */
+    font-size: 16px;
+}
+
+.search-cart a i {
+    margin-left: 10px;
+    font-size: 18px; /* Kích thước biểu tượng giỏ hàng */
+}
+
+
 /* Phần Đăng nhập / Đăng xuất */
 nav div {
     display: flex;
@@ -106,7 +119,7 @@ nav div {
 
 .text-white {
     color: white;
-    font-size: 14px;
+    font-size: 12px;
 }
 
 .fst-italic {
@@ -175,7 +188,7 @@ nav div {
 .product-list {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+
 }
 
 .product-item {
@@ -317,12 +330,7 @@ h1 {
 }
 
 /* Thẻ chứa sản phẩm và phần header chung */
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
+
 /* Container chứa ảnh */
 .image-container {
     width: 100%; /* Đảm bảo container chiếm toàn bộ chiều rộng */
@@ -584,10 +592,10 @@ h1 {
 }
 
 .product-category {
-    margin-bottom: 30px;
+
     background-color: rgba(255, 255, 255, 0.9);
     border-radius: 10px;
-    padding: 20px;
+
 }
 
 .product-list {
@@ -607,7 +615,7 @@ h1 {
 }
 
 .product-list li:hover {
-    transform: translateY(-5px);
+
 }
 
 .product-list img {
@@ -717,7 +725,7 @@ h1 {
 }
 img{
     width: 60px;
-    height: 60px;
+
 }
 
 .modal {
@@ -774,24 +782,27 @@ img{
 */
 
 .gt-container {
-    text-align: center;
-    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    height: 500px;
 }
 
 .slideshow-container {
     position: relative;
-    max-width: 800px;
+    width: 100%; /* Chiều rộng của vùng slideshow */
+    max-width: 800px; /* Chiều rộng tối đa */
     margin: auto;
+    overflow: hidden; /* Ẩn phần tràn ra ngoài */
 }
 
 .slides {
     display: none;
 }
 
-
-.image {
-    width: 100%;
-    border-radius: 10px;
+.slides img {
+    width: 100%; /* Hình ảnh sẽ chiếm toàn bộ chiều rộng vùng chứa */
+    height: 400px; /* Đặt chiều cao cố định */
+    object-fit: cover; /* Cắt và căn chỉnh ảnh để phù hợp với vùng chứa */
 }
 
 .dots-container {
@@ -802,17 +813,88 @@ img{
 .dot {
     height: 15px;
     width: 15px;
-    margin: 0 2px;
+    margin: 0 5px;
     background-color: #bbb;
     border-radius: 50%;
     display: inline-block;
-    transition: background-color 0.6s;
     cursor: pointer;
+    transition: background-color 0.3s;
 }
 
-.dot:hover {
+.dot.active, .dot:hover {
     background-color: #717171;
 }
+
+.image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.banner-container {
+    flex: 1;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.banner_slide {
+    align-items: center;
+    justify-content: center;
+    background-color: #f1f1f1;
+    margin-bottom: 10px; /* Khoảng cách giữa các banner */
+    border-radius: 20px;
+    overflow: hidden; /* Đảm bảo ảnh không tràn ra ngoài */
+}
+
+.banner_slide:last-child {
+    margin-bottom: 0; /* Xóa khoảng cách cho phần cuối */
+}
+
+.banner-image-slide {
+    width: 250px; /* Cho phép ảnh co giãn theo tỷ lệ */
+    height: 100%; /* Chiều cao bằng với banner_slide */
+    object-fit: contain; /* Giữ nguyên tỷ lệ ảnh và căn giữa */
+    border-radius: 20px;
+}
+
+/* --- MEDIA QUERY --- */
+@media (max-width: 768px) { /* Đối với màn hình nhỏ hơn hoặc bằng 768px */
+    .slideshow-container {
+        max-width: 100%; /* Chiều rộng tối đa theo màn hình */
+    }
+
+    .slides img {
+        height: 300px; /* Chiều cao nhỏ hơn */
+    }
+
+    .dots-container {
+        margin-top: 8px; /* Giảm khoảng cách */
+    }
+
+    .dot {
+        height: 10px; /* Giảm kích thước dot */
+        width: 10px;
+    }
+
+    .banner-container {
+        padding: 10px; /* Giảm padding */
+    }
+
+    .banner_slide {
+        margin-bottom: 8px; /* Giảm khoảng cách giữa các banner */
+    }
+
+    .banner-image-slide {
+        width: 180px; /* Thu nhỏ kích thước ảnh */
+        height: auto; /* Tự động điều chỉnh chiều cao */
+    }
+}
+
 .contact{
     text-align: center;
 }

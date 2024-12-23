@@ -24,16 +24,16 @@
 <body>
 <th:block id="main-content">
 
-    <div class="product-category" style="background-color: rgba(255, 255, 255, 0.8); border-radius: 10px; padding: 10px;">
+    <div class="product-category">
         <div class="container">
-            <ul class="product-list" style="list-style-type: none; padding: 0;">
+            <ul class="product-list">
                 <th:block th:each="category : ${categories}">
-                    <li style="display: inline-block; margin: 10px; text-align: center;">
+                    <li>
                         <img th:src="${category.img}"
-                             style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;"
+
                              th:alt="${category.name}"/>
                         <p th:text="${category.name}"
-                           style="margin-top: 5px; font-size: 14px; color: #333;"></p>
+                           ></p>
                     </li>
                 </th:block>
             </ul>
@@ -43,35 +43,35 @@
     <!-- Main Product Section -->
     <div class="main-product">
         <div class="container">
-            <div class="gt-container" style="display: flex; justify-content: space-between; height: 500px;">
-                <div class="slideshow-container" style="flex: 3; position: relative; height: 100%; overflow: hidden;">
-                    <div class="slides" style="display: none; width: 100%; height: 100%;">
-                        <img src="/img/nghenhin_dji-air-3s_1.jpg" alt="Slide 1" class="image" style="width: 100%; height: 100%; object-fit: cover;">
+            <div class="gt-container" >
+                <div class="slideshow-container">
+                    <div class="slides">
+                        <img src="/img/nghenhin_dji-air-3s_1.jpg" alt="Slide 1" class="image">
                     </div>
-                    <div class="slides" style="display: none; width: 100%; height: 100%;">
-                        <img src="/img/hq720.jpg" alt="Slide 2" class="image" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="slides" >
+                        <img src="/img/hq720.jpg" alt="Slide 2" class="image">
                     </div>
-                    <div class="slides" style="display: none; width: 100%; height: 100%;">
-                        <img src="/img/img_1067-1-1.jpg" alt="Slide 3" class="image" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="slides">
+                        <img src="/img/img_1067-1-1.jpg" alt="Slide 3" class="image">
                     </div>
 
                     <!-- Navigation dots -->
-                    <div class="dots-container" style="position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); display: flex;">
-                        <span class="dot" onclick="currentSlide(1)" style="height: 15px; width: 15px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.3s ease; cursor: pointer;"></span>
-                        <span class="dot" onclick="currentSlide(2)" style="height: 15px; width: 15px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.3s ease; cursor: pointer;"></span>
-                        <span class="dot" onclick="currentSlide(3)" style="height: 15px; width: 15px; margin: 0 5px; background-color: #bbb; border-radius: 50%; display: inline-block; transition: background-color 0.3s ease; cursor: pointer;"></span>
+                    <div class="dots-container">
+                        <span class="dot" onclick="currentSlide(1)" ></span>
+                        <span class="dot" onclick="currentSlide(2)" ></span>
+                        <span class="dot" onclick="currentSlide(3)" ></span>
                     </div>
                 </div>
 
-                <div class="banner-container" style="flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 20px; box-sizing: border-box; ">
-                    <div class="banner" style="width: 100%; height: 33%; background-color: #f1f1f1; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;border-radius:20px">
-                        <img src="/img/img_1067-1-1.jpg" alt="Banner 1" class="banner-image" style="max-width: 100%; max-height: 100%; object-fit: contain;border-radius:20px">
+                <div class="banner-container">
+                    <div class="banner_slide">
+                        <img src="/img/img_1067-1-1.jpg" alt="Banner 1" class="banner-image-slide">
                     </div>
-                    <div class="banner" style="width: 100%; height: 33%; background-color: #f1f1f1; display: flex; align-items: center; justify-content: center; margin-bottom: 10px;border-radius:20px">
-                        <img src="/img/img_1067-1-1.jpg" alt="Banner 2" class="banner-image" style="max-width: 100%; max-height: 100%; object-fit: contain;border-radius:20px">
+                    <div class="banner_slide" >
+                        <img src="/img/img_1067-1-1.jpg" alt="Banner 2" class="banner-image-slide">
                     </div>
-                    <div class="banner" style="width: 100%; height: 33%; background-color: #f1f1f1; display: flex; align-items: center; justify-content: center;border-radius:20px">
-                        <img src="/img/img_1067-1-1.jpg" alt="Banner 3" class="banner-image" style="max-width: 100%; max-height: 100%; object-fit: contain;border-radius:20px">
+                    <div class="banner_slide" >
+                        <img src="/img/img_1067-1-1.jpg" alt="Banner 3" class="banner-image-slide">
                     </div>
                 </div>
 
