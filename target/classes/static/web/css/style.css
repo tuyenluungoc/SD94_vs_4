@@ -264,6 +264,7 @@ nav div {
     padding: 10px; /* Thêm khoảng cách trên dưới */
     scroll-padding-left: 20px; /* Tạo khoảng cách cho card đầu tiên khi cuộn */
     margin: 0; /* Xóa margin tự động để không bị căn giữa */
+    flex-wrap: nowrap;
 }
 
 /* Đảm bảo card đầu tiên không bị khuất */
@@ -288,6 +289,7 @@ nav div {
 
 /* Điều chỉnh cho các thẻ card */
 .card {
+    background-color: rgba(255, 255, 255, 0.8);
     flex: 0 0 30%; /* Thẻ card chiếm 30% chiều rộng */
     background-color: white;
     border-radius: 8px;

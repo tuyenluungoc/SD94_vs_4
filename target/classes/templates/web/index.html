@@ -126,6 +126,7 @@
                     </div>
                 </div>
             </section>
+
             <div class="banner-video-container">
                 <video autoplay muted loop class="video-banner">
                     <source src="https://dji-vietnam.vn/wp-content/uploads/2023/04/video-mavic-3-pro.mp4" type="video/mp4">
@@ -140,10 +141,10 @@
 
 
             <h1>DJI MINI</h1>
-            <div class="card-container" style="flex-wrap: nowrap;">
-                <div th:each="product : ${productsmini}" class="card"style="background-color: rgba(255, 255, 255, 0.8)">
+            <div class="card-container">
+                <div th:each="product : ${productsmini}" class="card">
                     <!-- Thêm thẻ <a> để bao quanh thẻ .card, sử dụng productCode làm tham số -->
-                    <a th:href="@{/products/{productCode}(productCode=${product.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                    <a th:href="@{/products/{productCode}(productCode=${product.productCode})}" class="card-link">
                         <img th:src="${product.image}" alt="${product.name}" class="card-image">
                         <h2 class="card-title" th:text="${product.name}">Tên sản phẩm</h2>
 
@@ -154,9 +155,9 @@
 
 
             <h1>DJI MAVIC</h1>
-            <div class="card-container" style="flex-wrap: nowrap;" >
-                <div th:each="productmavic : ${productsmavic}" class="card"  >
-                    <a th:href="@{/products/{productCode}(productCode=${productmavic.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+            <div class="card-container">
+                <div th:each="productmavic : ${productsmavic}" class="card" >
+                    <a th:href="@{/products/{productCode}(productCode=${productmavic.productCode})}" class="card-link">
                         <img th:src="${productmavic.image}" alt="${product.name}" class="card-image">
                         <h2 class="card-title" th:text="${productmavic.name}">Tên sản phẩm</h2>
                         <p class="card-text" th:text="${productmavic.description} ">Mô tả</p>
@@ -168,9 +169,9 @@
 
 
             <h1>DJI FPV</h1>
-            <div class="card-container" style="flex-wrap: nowrap;">
-                <div th:each="productsfpv : ${productsfpv}" class="card" style="width: 37%" >
-                    <a th:href="@{/products/{productCode}(productCode=${productsfpv.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+            <div class="card-container">
+                <div th:each="productsfpv : ${productsfpv}" class="card">
+                    <a th:href="@{/products/{productCode}(productCode=${productsfpv.productCode})}" class="card-link">
                         <img th:src="${productsfpv.image}" alt="${product.name}" class="card-image">
                         <h2 class="card-title" th:text="${productsfpv.name}">Tên sản phẩm</h2>
                         <p class="card-text" th:text="${productsfpv.description} ">Mô tả</p>
@@ -181,9 +182,9 @@
 
             <!-- DJI INS Section -->
             <h1>DJI Inspire</h1>
-            <div class="card-container" style="flex-wrap: nowrap;">
+            <div class="card-container">
                 <div th:each="productsins : ${productsins}" class="card">
-                    <a th:href="@{/products/{productCode}(productCode=${productsins.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                    <a th:href="@{/products/{productCode}(productCode=${productsins.productCode})}" class="card-link">
                         <img th:src="${productsins.image}" alt="${product.name}" class="card-image">
                         <h2 class="card-title" th:text="${productsins.name}">Tên sản phẩm</h2>
                         <p class="card-text" th:text="${productsins.description} ">Mô tả</p>
@@ -192,9 +193,9 @@
             </div>
 
             <h1>DJI MAVIC AIR</h1>
-            <div class="card-container" style="flex-wrap: nowrap;">
+            <div class="card-container">
                 <div th:each="productsmar : ${productsmar}" class="card">
-                    <a th:href="@{/products/{productCode}(productCode=${productsmar.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+                    <a th:href="@{/products/{productCode}(productCode=${productsmar.productCode})}" class="card-link">
                         <img th:src="${productsmar.image}" alt="${product.name}" class="card-image">
                         <h2 class="card-title" th:text="${productsmar.name}">Tên sản phẩm</h2>
                         <p class="card-text" th:text="${productsmar.description} ">Mô tả</p>
@@ -203,9 +204,9 @@
             </div>
 
             <h1>DJI agras</h1>
-            <div class="card-container" style="flex-wrap: nowrap;" >
-                <div th:each="productsmas : ${productsmas}" class="card" style="width: 37%" >
-                    <a th:href="@{/products/{productCode}(productCode=${productsmas.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+            <div class="card-container">
+                <div th:each="productsmas : ${productsmas}" class="card">
+                    <a th:href="@{/products/{productCode}(productCode=${productsmas.productCode})}" class="card-link">
                         <img th:src="${productsmas.image}" alt="${product.name}" class="card-image">
                         <h2 class="card-title" th:text="${productsmas.name}">Tên sản phẩm</h2>
                         <p class="card-text" th:text="${productsmas.description} ">Mô tả</p>
@@ -215,9 +216,9 @@
             </div>
             <h1>DJI MIC</h1>
             <!--            productmic của djimic chứ ko phải của productmavic-->
-            <div class="card-container" style="flex-wrap: nowrap;" >
-                <div th:each="productmic : ${productmic}" class="card" style="width: 37%" >
-                    <a th:href="@{/products/{productCode}(productCode=${productmic.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+            <div class="card-container">
+                <div th:each="productmic : ${productmic}" class="card">
+                    <a th:href="@{/products/{productCode}(productCode=${productmic.productCode})}" class="card-link">
                         <img th:src="${productmic.image}" alt="${product.name}" class="card-image">
                         <h2 class="card-title" th:text="${productmic.name}">Tên sản phẩm</h2>
                         <p class="card-text" th:text="${productmic.description} ">Mô tả</p>
@@ -228,9 +229,9 @@
             <!--            productmavic đổi cảằng này ưữaăng sao cho no giong di chu toan productmavic -->
             <!--            cái t-->
             <h1>DJI osmo action</h1>
-            <div class="card-container" style="flex-wrap: nowrap;">
-                <div th:each="productsom : ${productsom}" class="card" style="width: 37%" >
-                    <a th:href="@{/products/{productCode}(productCode=${productsom.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+            <div class="card-container">
+                <div th:each="productsom : ${productsom}" class="card">
+                    <a th:href="@{/products/{productCode}(productCode=${productsom.productCode})}" class="card-link">
                         <img th:src="${productsom.image}" alt="${product.name}" class="card-image">
                         <h2 class="card-title" th:text="${productsom.name}">Tên sản phẩm</h2>
                         <p class="card-text" th:text="${productsom.description} ">Mô tả</p>
@@ -241,9 +242,9 @@
 
 
             <h1>DJI osmo mobile</h1>
-            <div class="card-container"style="flex-wrap: nowrap;"  >
-                <div th:each="productsomm : ${productsomm}" class="card" style="width: 37%" >
-                    <a th:href="@{/products/{productCode}(productCode=${productsomm.productCode})}" class="card-link" style="color: black; text-decoration: none;">
+            <div class="card-container">
+                <div th:each="productsomm : ${productsomm}" class="card">
+                    <a th:href="@{/products/{productCode}(productCode=${productsomm.productCode})}" class="card-link">
                         <img th:src="${productsomm.image}" alt="${product.name}" class="card-image">
                         <h2 class="card-title" th:text="${productsomm.name}">Tên sản phẩm</h2>
                         <p class="card-text" th:text="${productsomm.description} ">Mô tả</p>
