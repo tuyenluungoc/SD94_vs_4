@@ -24,7 +24,6 @@ import org.example.sd_94vs1.service.ShoppingCartProductsService;
 import org.example.sd_94vs1.service.ShoppingCartService;
 import org.example.sd_94vs1.service.email.EmailService;
 import org.example.sd_94vs1.service.email.PdfInvoiceService;
-import org.example.sd_94vs1.service.oder.OrderLineService;
 import org.example.sd_94vs1.service.oder.OrderService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -57,7 +56,6 @@ public class PaymentController {
     private final ProductRepository productRepository;
     private final DetailedProductRepository detailedProductRepository;
     private final StatusRepository statusRepository ;
-    private final OrderLineService orderLineService;
 
 
 
@@ -297,21 +295,12 @@ public class PaymentController {
                                 warranty.setWarrantyStatus("active");
                                 warranties.add(warranty);
                             }
+
 // Lưu tất cả warranty
                             warrantyRepository.saveAll(warranties);
 
                         }
-                        System.out.println(shoppingCartCode +"hihih");
-                        String orderCode = orderService.findOrderCodeByShoppingCartCode(shoppingCartCode);
-                        System.out.println(orderCode);
-                        System.out.println("1234566");
-                        for (ShoppingCartProducts scProduct : shoppingCartProducts) {
-                            String productCode = scProduct.getProduct().getProductCode();
-                            int quantity = scProduct.getAmount();
 
-                            // Tạo OrderLine mới
-                            orderLineService.createOrderLine(orderCode, productCode, quantity);  // Dùng orderCode đã có để tạo OrderLine
-                        }
                         // Lấy thông tin người dùng từ session
                         HttpSession session = request.getSession();
                         User user = (User) session.getAttribute("currentUser");
@@ -339,7 +328,7 @@ public class PaymentController {
 // Duyệt qua từng đơn hàng và gửi email
                         for (Order order : orders) {
                             String customerEmail = order.getUser().getEmail(); // Lấy email của khách hàng từ đơn hàng
-//                            String orderCode = order.getOrderCode(); // Lấy mã hóa đơn
+                            String orderCode = order.getOrderCode(); // Lấy mã hóa đơn
 
                             String subject = "Xác nhận thanh toán thành công";
                             String content = String.format(
