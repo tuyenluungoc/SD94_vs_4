@@ -29,16 +29,16 @@
             <ul class="product-list">
                 <th:block th:each="category : ${categories}">
                     <li>
-                        <img th:src="${category.img}"
-
-                             th:alt="${category.name}"/>
-                        <p th:text="${category.name}"
-                           ></p>
+                        <!-- Ảnh danh mục -->
+                        <img th:src="${category.img}" th:alt="${category.name}" />
+                        <!-- Tên danh mục -->
+                        <p th:text="${category.name}"></p>
                     </li>
                 </th:block>
             </ul>
         </div>
     </div>
+
 
     <!-- Main Product Section -->
     <div class="main-product">
@@ -65,13 +65,13 @@
 
                 <div class="banner-container">
                     <div class="banner_slide">
-                        <img src="/img/img_1067-1-1.jpg" alt="Banner 1" class="banner-image-slide">
+                        <img src="/img/djimini4-removebg-preview.png" alt="Banner 1" class="banner-image-slide">
                     </div>
                     <div class="banner_slide" >
-                        <img src="/img/img_1067-1-1.jpg" alt="Banner 2" class="banner-image-slide">
+                        <img src="/img/djimini4-removebg-preview.png" alt="Banner 2" class="banner-image-slide">
                     </div>
                     <div class="banner_slide" >
-                        <img src="/img/img_1067-1-1.jpg" alt="Banner 3" class="banner-image-slide">
+                        <img src="/img/djimini4-removebg-preview.png" alt="Banner 3" class="banner-image-slide">
                     </div>
                 </div>
 
@@ -79,22 +79,20 @@
 
 
             <br>
-            <h1 style="color: whitesmoke"> Tin Nổi Bật</h1>
-            <div class="card-container-tin" style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding: 10px;">
-                <div class="card-tin" th:each="blog : ${latestBlogs}"
-                     style="width: 40%; max-width: 500px; min-height: 400px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; align-items: center;">
-                    <!-- Card link -->
-                    <a th:href="@{/blogs/{blogCode}(blogCode=${blog.blogCode})}" style="text-decoration: none; color: inherit;">
-                        <div class="card-image-container-tin" style="width: 100%; display: flex; justify-content: center;">
-                            <img th:src="@{${blog.thumbnail}}" alt="${blog.title}" class="card-image"
-                                 style="width: 50%; max-height: 200px; object-fit: cover;">
+            <h1 class="tieude"> Tin Nổi Bật</h1>
+            <div class="card-container-tin">
+                <div class="card-tin" th:each="blog : ${latestBlogs}">
+                    <a class="link" th:href="@{/blogs/{blogCode}(blogCode=${blog.blogCode})}">
+                        <!-- Ảnh bìa -->
+                        <div class="card-image-container-tin">
+                            <img th:src="@{${blog.thumbnail}}" alt="${blog.title}" class="card-image">
                         </div>
 
-                        <div class="card-content-tin" style="padding: 15px; text-align: center; display: flex; flex-direction: column; justify-content: space-between;">
-                            <h2 class="card-title-tin" th:text="${blog.title}" style="font-size: 1.5em; margin: 10px 0; word-wrap: break-word; overflow-wrap: break-word; text-align: center;"></h2>
-                            <p class="card-text-tin" th:text="${blog.description}" style="font-size: 1em; margin: 0; word-wrap: break-word; overflow-wrap: break-word; text-align: center;"></p>
+                        <!-- Nội dung -->
+                        <div class="card-content-tin">
+                            <h2 class="card-title-tin" th:text="${blog.title}"></h2>
+                            <p class="card-text-tin" th:text="${blog.description}"></p>
                         </div>
-
                     </a>
                 </div>
             </div>
@@ -105,8 +103,9 @@
 
 
 
+
             <!-- Section Giới Thiệu -->
-            <section class="about-section"style="background-color: transparent;">
+            <section class="about-section">
                 <div class="section-container">
                     <div class="image-container">
                         <img class="anhGT" src="/img/section.jpg" alt="DJI Image">
@@ -127,15 +126,15 @@
                     </div>
                 </div>
             </section>
-            <div class="banner-video-container" style="position: relative; width: 100%; height: 300px; overflow: hidden;">
-                <video autoplay muted loop style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); min-width: 100%; min-height: 100%; object-fit: cover; z-index: 1;">
+            <div class="banner-video-container">
+                <video autoplay muted loop class="video-banner">
                     <source src="https://dji-vietnam.vn/wp-content/uploads/2023/04/video-mavic-3-pro.mp4" type="video/mp4">
                     Trình duyệt của bạn không hỗ trợ video.
                 </video>
-                <div class="banner-overlay" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.3); display: flex; flex-direction: column; justify-content: center; align-items: flex-start; padding-left: 20px; z-index: 2; color: #fff; text-align: left;">
-                    <h1 style="font-size: 2rem; margin: 0;">DJI MAVIC 3 PRO</h1>
-                    <p style="font-size: 1.2rem; margin: 10px 0 0;">Nắm bắt mọi khung hình trên không</p>
-                    <a href="http://localhost:8080/products/mv0013" style="margin-top: 20px; padding: 10px 20px; font-size: 1rem; color: #fff; background-color: #ff6600; border: none; border-radius: 5px; text-decoration: none; cursor: pointer;">Mua ngay</a>
+                <div class="banner-overlay">
+                    <h1 class="h1banner">DJI MAVIC 3 PRO</h1>
+                    <p class="pbanner" >Nắm bắt mọi khung hình trên không</p>
+                    <a href="http://localhost:8080/products/mv0013" class="abanner">Mua ngay</a>
                 </div>
             </div>
 
