@@ -85,40 +85,7 @@
 			<scope>test</scope>
 		</dependency>
 
-		<!-- OpenHTMLToPDF (chuyển đổi HTML sang PDF) -->
-		<dependency>
-			<groupId>com.openhtmltopdf</groupId>
-			<artifactId>openhtmltopdf-pdfbox</artifactId>
-			<version>1.0.10</version>
-		</dependency>
-		<dependency>
-			<groupId>org.xhtmlrenderer</groupId>
-			<artifactId>flying-saucer-pdf</artifactId>
-			<version>9.1.22</version>
-		</dependency>
-		<!-- OpenHTMLToPDF (support for additional features like images or fonts) -->
-		<dependency>
-			<groupId>com.openhtmltopdf</groupId>
-			<artifactId>openhtmltopdf-slf4j</artifactId>
-			<version>1.0.10</version>
-		</dependency>
 
-		<!-- Nếu muốn sử dụng iText 7 cho các tính năng nâng cao, có thể cần thêm các modules khác -->
-		<!-- iText 7 Layout Module (để sử dụng Document và các tính năng layout) -->
-		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>layout</artifactId>
-			<version>7.2.5</version>
-		</dependency>
-
-
-		<!-- Thư viện dùng cho font -->
-		<dependency>
-			<groupId>com.itextpdf</groupId>
-			<artifactId>font-asian</artifactId>
-			<version>7.2.5</version>
-			<scope>test</scope>
-		</dependency>
 		<!-- Nếu muốn sử dụng iText 7 cho các tính năng nâng cao, có thể cần thêm các modules khác -->
 		<!-- iText 7 Layout Module (để sử dụng Document và các tính năng layout) -->
 		<dependency>

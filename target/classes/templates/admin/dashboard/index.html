@@ -1,113 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="https://www.thymeleaf.org"
-      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{}, ~{:: .content-wrapper}, ~{:: #js})}">
 
 <head>
-    <title>Bảng điều khiển</title>
+    <title>Dashboard</title>
 </head>
-<th:block id="css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f9f9fc;
-        }
 
-        .container {
-            max-width: 800px;
-            margin: 20px auto;
-            padding: 15px;
-            background: #ffffff;
-            border-radius: 6px;
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-        }
-
-        h1, h2 {
-            text-align: center;
-            margin: 0 0 10px;
-            color: #333333;
-        }
-
-        h2 {
-            font-size: 1.25rem;
-            border-bottom: 2px solid #e4e4e4;
-            padding-bottom: 5px;
-        }
-
-        .section {
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #eaeaea;
-            border-radius: 5px;
-            background: #f9f9fc;
-        }
-
-        form {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-bottom: 10px;
-        }
-
-        input[type="number"] {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        button {
-            padding: 8px 12px;
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        button:hover {
-            background-color: #0056b3;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-
-        table, th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-        }
-
-        th {
-            background-color: #f7f7f7;
-            color: #333333;
-            font-weight: bold;
-        }
-
-        tr:nth-child(even) {
-            background-color: #f9f9fc;
-        }
-
-        tr:hover {
-            background-color: #f1f1f1;
-        }
-
-    </style>
-</th:block>
 <body>
+<!-- BODY -->
 <div class="content-wrapper">
+    <!-- Content Header (Page header) -->
     <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
                 <div class="col-sm-12">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">
-                            <a href="/admin/dashboard">Bảng điều khiển</a>
+                            <a href="/admin/dashboard">Dashboard</a>
                         </li>
                         <li class="breadcrumb-item active">
                             Tổng quan
@@ -118,138 +27,24 @@
         </div>
     </div>
 
-    <div class="container">
-        <h1>Thống kê Doanh thu</h1>
-
-        <!-- Monthly Statistics -->
-        <div class="section">
-            <h2>Thống kê theo Tháng</h2>
-            <form id="monthlyStatsForm">
-                <label for="year">Chọn Năm:</label>
-                <input type="number" id="year" name="year" min="2020" max="2100" required>
-                <button type="button" onclick="fetchMonthlyStats()">Lấy thống kê</button>
-            </form>
-            <div id="monthlyStatsResult"></div>
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            ...
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-
-        <!-- Yearly Statistics -->
-        <div class="section">
-            <h2>Thống kê theo Năm</h2>
-            <button type="button" onclick="fetchYearlyStats()">Lấy thống kê hàng năm</button>
-            <div id="yearlyStatsResult"></div>
-        </div>
-
-        <!-- Top Selling Products -->
-        <div class="section">
-            <h2>Sản phẩm bán chạy nhất</h2>
-            <form id="topProductsForm">
-                <label for="limit">Số lượng sản phẩm bán chạy:</label>
-                <input type="number" id="limit" name="limit" min="1" required>
-                <button type="button" onclick="fetchTopProducts()">Lấy sản phẩm bán chạy</button>
-            </form>
-            <div id="topProductsResult"></div>
-        </div>
-
-        <h1>Thống kê doanh thu hàng ngày</h1>
-        <form id="dailyStatsForm">
-            <label for="startDate">Từ ngày:</label>
-            <input type="date" id="startDate" name="startDate" required>
-            <label for="endDate">Đến ngày:</label>
-            <input type="date" id="endDate" name="endDate" required>
-            <button type="button" onclick="fetchDailyStats()">Lấy thống kê</button>
-        </form>
-        <div style="text-align: right; margin-top: 10px;">
-            <h2 id="totalRevenue">Tổng doanh thu: 0 VND</h2>
-        </div>
-        <canvas id="dailyChart"></canvas>
-    </div>
+    </section>
 </div>
+
 <th:block id="js">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        async function fetchMonthlyStats() {
-            const year = document.getElementById("year").value;
-            const response = await fetch(`/api/statistics/monthly?year=${year}`);
-            const data = await response.json();
-            const resultDiv = document.getElementById("monthlyStatsResult");
-            resultDiv.innerHTML = `<table>
-        <tr><th>Tháng</th><th>Năm</th><th>Tổng doanh thu</th></tr>
-        ${data.map(stat => `<tr>
-            <td>${stat.month}</td>
-            <td>${stat.year}</td>
-            <td>${stat.totalRevenue}</td>
-        </tr>`).join('')}
-    </table>`;
-        }
-        async function fetchYearlyStats() {
-            const response = await fetch('/api/statistics/yearly');
-            const data = await response.json();
-            const resultDiv = document.getElementById("yearlyStatsResult");
-            resultDiv.innerHTML = `<table>
-        <tr><th>Năm</th><th>Tổng doanh thu</th></tr>
-        ${data.map(stat => `<tr>
-            <td>${stat.year}</td>
-            <td>${stat.totalRevenue}</td>
-        </tr>`).join('')}
-    </table>`;
-        }
-        async function fetchTopProducts() {
-            const limit = document.getElementById("limit").value;
-            const response = await fetch(`/api/statistics/top-products?limit=${limit}`);
-            const data = await response.json();
-            const resultDiv = document.getElementById("topProductsResult");
-            resultDiv.innerHTML = `<table>
-        <tr><th>Mã sản phẩm</th><th>Tổng số lượng bán</th></tr>
-        ${data.map(stat => `<tr>
-            <td>${stat.productCode}</td>
-            <td>${stat.totalQuantity}</td>
-        </tr>`).join('')}
-    </table>`;
-        }
 
-        async function fetchDailyStats() {
-            const startDate = document.getElementById("startDate").value;
-            const endDate = document.getElementById("endDate").value;
-
-            const response = await fetch(`/api/statistics/daily?startDate=${startDate}&endDate=${endDate}`);
-            const data = await response.json();
-
-            const labels = data.map(item => item.date);
-            const revenues = data.map(item => item.totalRevenue);
-            const totalRevenue = revenues.reduce((sum, rev) => sum + parseFloat(rev), 0);
-
-            document.getElementById("totalRevenue").innerText = `Tổng doanh thu: ${totalRevenue.toLocaleString()} VND`;
-
-            // Hiển thị biểu đồ
-            const ctx = document.getElementById("dailyChart").getContext("2d");
-            new Chart(ctx, {
-                type: "bar",
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: "Doanh thu (VND)",
-                        data: revenues,
-                        backgroundColor: "rgba(75, 192, 192, 0.6)",
-                        borderColor: "rgba(75, 192, 192, 1)",
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        x: {
-                            title: { display: true, text: "Ngày" }
-                        },
-                        y: {
-                            title: { display: true, text: "Doanh thu (VND)" }
-                        }
-                    }
-                }
-            });
-        }
-
-
-    </script>
 </th:block>
 </body>
 
