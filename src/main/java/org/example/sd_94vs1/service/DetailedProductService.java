@@ -45,6 +45,9 @@ public class DetailedProductService {
     }
 
 
+    public DetailedProduct findDetailedProduct (String productCode) {
+        return detailedProductRepository.findByProduct_ProductCode(productCode);
+    }
 }
 
 

@@ -10,4 +10,6 @@ public interface StatusRepository extends JpaRepository<Status, String> {
     List<Status> findByUser_UserCode(String userCode);
 
     Status findByStatusCode(String statusCode);
+
+    Status findByShoppingCart_ShoppingCartCode(String shoppingCartCode);
 }

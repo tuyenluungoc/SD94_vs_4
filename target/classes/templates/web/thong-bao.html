@@ -97,6 +97,7 @@
                 <th>Loại</th>
                 <th>Trạng thái</th>
                 <th>Mã liên quan</th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
@@ -104,6 +105,16 @@
                 <td th:text="${notification?.shoppingCartCode != null ? 'Đơn hàng' : 'Bảo hành'}"></td>
                 <td th:text="${notification?.nameStatus}"></td>
                 <td th:text="${notification?.shoppingCartCode != null ? notification.shoppingCartCode : notification?.statusCode}"></td>
+                <td>
+                    <form id="cancel-order-form" th:action="@{/notifications/cancel-order/{shoppingCartCode}(shoppingCartCode=${notification.shoppingCartCode})}" method="POST" style="display: inline-block;">
+                        <button th:if="${notification?.nameStatus == 'Đang được chuẩn bị'}"
+                                class="btn btn-warning"
+
+                                style="display: inline-block;" >
+                            Hủy
+                        </button>
+                    </form>
+                </td>
             </tr>
             </tbody>
         </table>

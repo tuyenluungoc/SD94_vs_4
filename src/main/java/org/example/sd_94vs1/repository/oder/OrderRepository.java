@@ -15,6 +15,9 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     // Repository cho phép lưu trữ, tìm kiếm, và xử lý Order
     List<Order> findByFromShoppingCartCode(String shoppingCartCode);
 
+    @Query("SELECT o FROM Order o where o.fromShoppingCartCode=:shoppingCartCode ")
+    List<Order> findByShoppingCartCode(String shoppingCartCode);
+
     void delete(Order order);  // Xoá đơn hàng
 
     @Modifying
@@ -23,7 +26,9 @@ public interface OrderRepository extends JpaRepository<Order, String> {
     int updateOrderStatus(@Param("shoppingCartCode") String shoppingCartCode);
 
     List<Order> findByShoppingCart_ShoppingCartCode(String shoppingCartCode);
+
     List<Order> findByStatusTrue();
 
+    Order findOrderByOrderCodeAndStatusTrue(String orderCode);
 
 }

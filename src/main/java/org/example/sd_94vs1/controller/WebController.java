@@ -380,6 +380,32 @@ public class WebController {
 
         return "web/shoppingcart";
     }
+    @PostMapping("/update-cart-item")
+    public String updateCartItem(@RequestParam String productCode, @RequestParam int change, @RequestParam String shoppingCartCode, HttpServletRequest request) {
+        User user = (User) request.getSession().getAttribute("currentUser");
+
+        if (user == null) {
+            return "redirect:/dang-nhap";
+        }
+
+        // Tìm sản phẩm trong giỏ hàng
+        Optional<ShoppingCartProducts> cartProductOpt = shoppingCartProductsService.getByProductCodeAndCartCode(productCode, shoppingCartCode);
+
+        if (cartProductOpt.isPresent()) {
+            ShoppingCartProducts cartProduct = cartProductOpt.get();
+            int newAmount = cartProduct.getAmount() + change;
+
+            // Nếu số lượng mới <= 0, xóa sản phẩm khỏi giỏ hàng
+            if (newAmount <= 0) {
+                shoppingCartProductsService.delete(cartProduct);
+            } else {
+                cartProduct.setAmount(newAmount);
+                shoppingCartProductsService.save(cartProduct);
+            }
+        }
+
+        return "redirect:/own-shoppingcart"; // Quay lại giỏ hàng
+    }
 
 @GetMapping("/thanh-cong")
 public String thanhCong(Model model, HttpServletRequest request, RedirectAttributes redirectAttributes) {

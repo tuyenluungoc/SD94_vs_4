@@ -145,8 +145,19 @@ public class ShoppingCartProductsService {
         return false;
     }
 
-//    public List<ShoppingCartProducts> getShoppingCartProductsByCode(String shoppingCartCode) {
-//        return shoppingCartProductsRepository.findByShoppingCartCode(shoppingCartCode);
-//    }
+    public Optional<ShoppingCartProducts> getByProductCodeAndCartCode(String productCode, String shoppingCartCode) {
+        return shoppingCartProductsRepository.findByProduct_ProductCodeAndShoppingCart_ShoppingCartCode(productCode, shoppingCartCode);
+    }
+
+    public void delete(ShoppingCartProducts shoppingCartProduct) {
+        shoppingCartProductsRepository.delete(shoppingCartProduct);
+    }
+
+    public void save(ShoppingCartProducts cartProduct) {
+        shoppingCartProductsRepository.save(cartProduct);
+    }
+
+
+
 
 }

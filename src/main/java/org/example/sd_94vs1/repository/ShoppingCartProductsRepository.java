@@ -32,6 +32,8 @@ public interface ShoppingCartProductsRepository extends JpaRepository<ShoppingCa
 
         List<ShoppingCartProducts> findAllByShoppingCart_ShoppingCartCode(String shoppingCartCode);
 
+    Optional<ShoppingCartProducts> findByProduct_ProductCodeAndShoppingCart_ShoppingCartCode(String productCode, String shoppingCartCode);
+
 //    List<ShoppingCartProducts> findByShoppingCartCode(String shoppingCartCode);
 
 //        List<ShoppingCartProducts> findByShoppingCartCode(String shoppingCartCode);

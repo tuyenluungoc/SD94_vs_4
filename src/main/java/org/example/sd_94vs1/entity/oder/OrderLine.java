@@ -5,6 +5,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.example.sd_94vs1.entity.product.Product;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -29,7 +31,7 @@ public class OrderLine {
     Integer quantity;
 
     @Column(name = "price_at_order", nullable = false)
-    Double priceAtOrder;
+    BigDecimal priceAtOrder;
 
     @ManyToOne
     @JoinColumn(name = "order_code", referencedColumnName = "order_code", insertable = false, updatable = false)
