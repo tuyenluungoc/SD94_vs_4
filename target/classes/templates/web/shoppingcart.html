@@ -86,7 +86,23 @@
                             </div>
                         </td>
                         <td th:text="${shoppingCartProduct.price} + ' VND'">0 VND</td>
-                        <td th:text="${shoppingCartProduct.amount}">1</td>
+
+                        <td>
+                            <form th:action="@{/update-cart-item}" method="post">
+                                <input type="hidden" name="productCode" th:value="${shoppingCartProduct.product.productCode}" />
+                                <input type="hidden" name="shoppingCartCode" th:value="${shoppingCartProduct.shoppingCart.shoppingCartCode}" />
+                                <input type="hidden" name="change" value="-1" />
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">-</button>
+                            </form>
+                            <span class="mx-2" th:text="${shoppingCartProduct.amount}">1</span>
+                            <form th:action="@{/update-cart-item}" method="post">
+                                <input type="hidden" name="productCode" th:value="${shoppingCartProduct.product.productCode}" />
+                                <input type="hidden" name="shoppingCartCode" th:value="${shoppingCartProduct.shoppingCart.shoppingCartCode}" />
+                                <input type="hidden" name="change" value="1" />
+                                <button type="submit" class="btn btn-sm btn-outline-secondary">+</button>
+                            </form>
+                        </td>
+
                         <td th:text="${shoppingCartProduct.price * shoppingCartProduct.amount} + ' VND'">0 VND</td>
 <!--                        <td>${#numbers.formatCurrency(shoppingCartProduct.price * shoppingCartProduct.amount)}-->
                         <td>

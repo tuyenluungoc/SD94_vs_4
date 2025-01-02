@@ -49,7 +49,6 @@ public class OrderService {
         if (shoppingCartOpt.isEmpty()) {
             throw new IllegalArgumentException("Shopping cart does not exist");
         }
-
         // Kiểm tra xem đã có đơn hàng nào với shoppingCartCode chưa
         List<Order> existingOrders = orderRepository.findByFromShoppingCartCode(order.getFromShoppingCartCode());
 
@@ -119,6 +118,25 @@ public class OrderService {
             order.setFromShoppingCartCode(null);  // Hoặc giá trị khác nếu cần
             orderRepository.save(order);
         }
+    }
+
+    public Order findOrderByShoppingCartCode(String shoppingCartCode) {
+        List<Order> orders = orderRepository.findByShoppingCart_ShoppingCartCode(shoppingCartCode);
+        return orders.isEmpty() ? null : orders.get(0);
+    }
+    public String findOrderCodeByShoppingCartCode(String shoppingCartCode) {
+        List<Order> orders = orderRepository.findByShoppingCartCode(shoppingCartCode);
+        if (orders.isEmpty()) {
+            throw new RuntimeException("Không tìm thấy đơn hàng với shoppingCartCode: " + shoppingCartCode);
+        }
+
+        // Giả sử bạn lấy đơn hàng đầu tiên nếu có nhiều hơn một đơn hàng
+        Order order = orders.get(0);
+        return order.getOrderCode();
+    }
+    public Order findOrderByOrderCodeAndStatusTrue(String orderCode) {
+        Order order = orderRepository.findOrderByOrderCodeAndStatusTrue(orderCode);
+        return order;
     }
 
 }

@@ -6,7 +6,9 @@
   <title>Tất cả bài viết</title>
 
   <th:block id="css">
+    <style>
 
+    </style>
   </th:block>
 </head>
 
@@ -50,7 +52,7 @@
                   <th>Tổng tiền</th>
                   <th>Ngày tạo</th>
                   <th>Trạng thái</th>
-
+                  <th>Thao Tác</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -58,19 +60,38 @@
                 <tr th:each="order : ${orders}">
                   <td th:text="${order.orderCode}"></td>
                   <td>
-                    <a th:href="@{/admin/user/detail/{userCode}(userCode=${order.userCode})}"
-                       th:text="${order.user.name}">Người dùng</a>
+                    <a class="btn-detail" th:attr="data-id=${order.user.userCode}" th:text="${order.user.name}">Người dùng</a>
+
                   </td>
                   <td th:text="${order.shippingAddress}"></td>
                   <td th:text="${order.totalAmountMoney} + ' VND'">0 VND</td>
                   <td th:text="${#dates.format(order.createdAt, 'dd/MM/yyyy')}"></td>
                   <td th:text="${order.status ? 'Hoàn thành' : 'Chưa hoàn thành'}"></td>
-
-
+                  <td>
+                    <a th:href="@{/admin/orders/details/{orderCode}(orderCode=${order.orderCode})}"
+                       class="btn btn-info">
+                      Chi Tiết
+                    </a>
+                    <!--                  <a th:href="@{/admin/orders/export-pdf/{orderCode}(orderCode=${orderCode})}">-->
+                    <!--                    <button>Xuất hóa đơn</button>-->
+                    <!--                  </a>-->
+                    <a th:href="@{/admin/orders/export-pdf/{orderCode}(orderCode=${order.orderCode})}">
+                      <button>Xuất hóa đơn</button>
+                    </a>
+                  </td>
 
                 </tr>
+
+
                 </tbody>
               </table>
+              <div id="customerDetail" class="thong-tin-chi-tiet" style="display: none;">
+                <h2>Thông tin khách hàng</h2>
+                <div id="userInfo">
+                  <!-- Dữ liệu sẽ được cập nhật qua JavaScript -->
+                </div>
+                <button id="closeButton" class="btn-close">Đóng</button>
+              </div>
             </div>
           </div>
         </div>
@@ -94,6 +115,64 @@
         responsive: true,
       });
     });
+
+    window.onload = function () {
+      const detailButtons = document.querySelectorAll(".btn-detail"); // Tìm tất cả các thẻ <a> với class btn-detail
+      const customerDetail = document.getElementById("customerDetail");
+      const closeButton = document.getElementById("closeButton");
+      const userInfoDiv = document.getElementById("userInfo");
+
+      detailButtons.forEach(button => {
+        button.addEventListener("click", async function () {
+          const userCode = button.getAttribute("data-id"); // Lấy userCode từ data-id
+          try {
+            const response = await fetch(`/admin/custumer/detail/${userCode}`);
+            if (response.ok) {
+              const user = await response.json();
+              userInfoDiv.innerHTML = `
+<form action="/admin/custumer/update/${user.userCode}" method="post" class="form-container" enctype="application/x-www-form-urlencoded">
+    <p><strong>Mã khách hàng:</strong> ${user.userCode}</p>
+
+    <div class="form-group">
+        <label for="customer_name" class="form-label">Tên Khách Hàng</label>
+        <input type="text" id="customer_name" name="name" value="${user.name}" class="form-input" required>
+    </div>
+
+    <div class="form-group">
+        <label for="customer_email" class="form-label">Email Khách Hàng</label>
+        <input type="email" id="customer_email" name="email" value="${user.email}" class="form-input" required>
+    </div>
+
+
+
+    <div class="form-group">
+        <label for="customer_phone" class="form-label">Số Điện Thoại</label>
+        <input type="tel" id="customer_phone" name="sdt" value="${user.sdt}" class="form-input" required>
+    </div>
+
+    <div class="form-group">
+        <label for="customer_address" class="form-label">Địa Chỉ</label>
+        <input type="text" id="customer_address" name="address" value="${user.address}" class="form-input" required>
+    </div>
+
+
+</form>
+                    `;
+              customerDetail.style.display = "block"; // Hiển thị phần chi tiết khách hàng
+            } else {
+              console.error("Không tìm thấy khách hàng với mã:", userCode);
+            }
+          } catch (error) {
+            console.error("Lỗi khi lấy thông tin khách hàng:", error);
+          }
+        });
+      });
+
+      closeButton.addEventListener("click", function () {
+        customerDetail.style.display = "none"; // Ẩn phần chi tiết khi nhấn nút đóng
+      });
+    };
+
   </script>
 </div>
 

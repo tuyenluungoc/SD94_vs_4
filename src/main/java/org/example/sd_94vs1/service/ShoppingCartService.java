@@ -140,4 +140,12 @@ public class ShoppingCartService {
     }
 
 
+    public ShoppingCart findByShoppingCartCode(String shoppingCartCode) {
+        return shoppingCartRepository.findByShoppingCartCode(shoppingCartCode)
+                .orElseThrow(() -> new RuntimeException("Không tìm thấy giỏ hàng với mã: " + shoppingCartCode));
+    }
+
+    public ShoppingCart save(ShoppingCart shoppingCart) {
+        return shoppingCartRepository.save(shoppingCart);
+    }
 }
