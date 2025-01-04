@@ -13,6 +13,68 @@
               integrity="sha512-sMXtMNL1zRzolHYKEujM2AqCLUR9F2C4/05cdbxjjLSRvMQIciEPCQZo++nk7go3BtSuK9kfa/s+a4f4i5pLkw=="
               crossorigin="anonymous" referrerpolicy="no-referrer"/>
 
+        <style>
+            td form {
+                display: inline-block;
+                margin: 0;
+            }
+
+            td span {
+                display: inline-block;
+                min-width: 30px; /* Đảm bảo khoảng cách cố định cho số lượng */
+                text-align: center;
+            }
+
+            td {
+                white-space: nowrap; /* Đảm bảo không xuống dòng */
+            }
+
+            /* lịch sử đặt hàng*/
+
+            .modal-dialog {
+                max-width: 80%; /* Tăng kích thước form lên 80% màn hình */
+                margin: auto; /* Căn giữa dọc và ngang */
+            }
+
+            .modal-content {
+                border-radius: 10px; /* Bo góc cho form */
+                padding: 20px; /* Thêm khoảng cách bên trong */
+                box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3); /* Thêm đổ bóng */
+            }
+
+            .modal-header, .modal-footer {
+                background-color: #f8f9fa; /* Nền nhẹ */
+                border: none; /* Loại bỏ đường viền */
+            }
+
+            .modal-title {
+                font-size: 24px; /* Tăng kích thước chữ */
+                font-weight: bold; /* Đậm chữ tiêu đề */
+            }
+
+            .table {
+                width: 100%; /* Đảm bảo bảng chiếm toàn bộ chiều rộng modal */
+            }
+
+            .table th, .table td {
+                text-align: center; /* Căn giữa nội dung */
+                vertical-align: middle; /* Căn giữa theo chiều dọc */
+                padding: 10px; /* Thêm khoảng cách trong ô */
+            }
+
+            .modal-body {
+                max-height: 70vh; /* Giới hạn chiều cao nội dung */
+                overflow-y: auto; /* Cuộn dọc nếu nội dung dài */
+            }
+
+            .modal-footer {
+                display: flex;
+                justify-content: center; /* Căn giữa nút trong footer */
+                padding: 15px;
+            }
+
+
+        </style>
 
     </th:block>
 
@@ -22,6 +84,7 @@
     <div class="container my-5">
         <a id="historyButton" class="btn btn-secondary btn-lg ms-2" role="button" href="#" data-bs-toggle="modal" data-bs-target="#orderHistoryModal">Lịch sử đặt hàng</a>
 
+        <!-- Modal Lịch Sử Đặt Hàng -->
         <!-- Modal Lịch Sử Đặt Hàng -->
         <div class="modal fade" id="orderHistoryModal" tabindex="-1" aria-labelledby="orderHistoryModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
@@ -63,7 +126,8 @@
             </div>
         </div>
 
-        <h2 class="text-center mb-4">Giỏ Hàng Của Bạn</h2>
+
+        <h2 class="text-center mb-4" style="color: #fff;">Giỏ Hàng Của Bạn</h2>
         <div class="table-responsive">
             <table class="table table-bordered cart-table">
                 <thead class="table-light">
@@ -125,12 +189,15 @@
                 <tr>
                     <td colspan="3" class="text-end"><strong>Tổng Cộng:</strong></td>
                     <td th:text="${totalAmount} + ' VND'" id="totalAmountM">0 VND</td>
+                    <td></td>
                 </tr>
+
 
             </table>
 
             <a id="paymentButton" class="btn btn-primary btn-lg" role="button">Thanh toán</a>
             <a id="ClearButton"  class="btn btn-warning btn-lg" role="button" href="/clear-cart">Clear</a>
+
             <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -169,7 +236,7 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Huỷ</button>
                             <button type="button" id="confirmPayment" class="btn btn-primary">Xác nhận thanh toán</button>
                         </div>
                     </div>
