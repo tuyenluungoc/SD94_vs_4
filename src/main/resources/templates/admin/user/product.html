@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+<head>
+    <title>Tất cả Sản Phẩm</title>
+    <th:block id="css">
+        <!-- Thêm CSS tùy chỉnh nếu cần -->
+    </th:block>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/admin/dashboard">Dashboard</a></li>
+                        <li class="breadcrumb-item active">Danh sách Sản Phẩm</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row py-2">
+                <div class="col-12 d-flex justify-content-between">
+                    <a href="/admin/product" class="btn btn-info">
+                        <i class="fas fa-redo"></i> Refresh
+                    </a>
+                    <button class="btn btn-secondary" onclick="toggleProductForm()">+ Thêm Sản Phẩm</button>
+                </div>
+            </div>
+
+            <!-- Form thêm sản phẩm -->
+            <div id="product-form" class="card mt-3" style="display: none;">
+                <div class="card-header">
+                    <h3>Thêm Sản Phẩm Mới</h3>
+                </div>
+                <div class="card-body">
+                    <!-- Form thêm sản phẩm -->
+                    <form th:action="@{/admin/add-product}" method="post" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="product_name" class="mt-3">Tên Sản Phẩm</label>
+                                <input type="text" id="product_name" name="name" class="form-control" required>
+
+                                <label for="manufacturer_code" class="mt-3">Nhà Sản Xuất</label>
+                                <select id="manufacturer_code" name="manufacturerCode" class="form-control" required>
+                                    <!-- Duyệt qua danh sách nhà sản xuất từ Model -->
+                                    <option th:each="manufacturer : ${manufacturers}"
+                                            th:value="${manufacturer.manufacturerCode}"
+                                            th:text="${manufacturer.name}">--Chọn nhà sản xuất--</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="category_code">Danh Mục</label>
+                                <select id="category_code" name="categoryCode" class="form-control" required>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.categoryCode}"
+                                            th:text="${category.name}">--Chọn danh mục--</option>
+                                </select>
+
+                                <label for="description" class="mt-3">Mô Tả</label>
+                                <textarea id="description" name="description" class="form-control"></textarea>
+
+                                <label for="status" class="mt-3">Trạng Thái</label>
+                                <select name="status" id="status" class="form-control" required>
+                                    <option value="" disabled selected>--Chọn trạng thái--</option>
+                                    <option value="active">active</option>
+                                    <option value="inactive">inactive</option>
+                                    <option value="out of Stock">Out of Stock</option>
+                                </select>
+
+                                <label for="img" class="mt-3">Ảnh</label>
+                                <input type="file" id="img" name="image" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="mt-4 d-flex justify-content-between">
+                            <button type="submit" class="btn btn-success">Lưu Sản Phẩm</button>
+                            <button type="button" class="btn btn-danger" onclick="toggleProductForm()">Đóng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+
+
+            <!-- Danh sách sản phẩm -->
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="table-product" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Mã</th>
+                                    <th>Tên</th>
+                                    <th>Nhà Sản Xuất</th>
+                                    <th>Danh Mục</th>
+                                    <th>Trạng Thái</th>
+                                    <th>Ảnh</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="product : ${products}">
+                                    <td th:text="${product.productCode}"></td>
+                                    <td th:text="${product.name}"></td>
+                                    <td th:text="${product.manufacturer != null ? product.manufacturer.name : 'Không có thông tin'}"></td>
+
+                                    <td th:text="${product.category != null ? product.category.name : 'Không có thông tin'}"></td>
+                                    <td th:text="${product.status}"></td>
+                                    <td><img th:src="@{${product.image}}" alt="Ảnh" width="50"></td>
+                                    <td>
+                                        <button onclick="handleUpdate()" class="btn btn-warning"
+                                                data-toggle="modal" data-target="#updateProductModal"
+                                                th:attr="data-code=${product.productCode}">
+                                            Sửa
+                                        </button>
+
+                                        <form th:action="@{/admin/delete-product/{productCode}(productCode=${product.productCode})}"
+                                              method="post" style="display: inline;">
+                                            <button type="submit" class="btn btn-danger">Xóa</button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Update Product Modal -->
+    <div id="updateProductModal" class="modal fade" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Cập Nhật Sản Phẩm</h5>
+                    <button type="button" class="btn-close" data-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="update-product-form" th:action="@{/admin/update-product}" method="post" enctype="multipart/form-data">
+                        <input type="hidden" id="update_product_code" name="productCode">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <label for="update_product_name">Tên Sản Phẩm</label>
+                                <input type="text" id="update_product_name" name="name" class="form-control" required>
+
+                                <label for="update_manufacturer_code" class="mt-3">Nhà Sản Xuất</label>
+                                <select id="update_manufacturer_code" name="manufacturerCode" class="form-control" required>
+                                    <option th:each="manufacturer : ${manufacturers}"
+                                            th:value="${manufacturer.manufacturerCode}"
+                                            th:text="${manufacturer.name}">--Chọn nhà sản xuất--</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label for="update_category_code">Danh Mục</label>
+                                <select id="update_category_code" name="categoryCode" class="form-control" required>
+                                    <option th:each="category : ${categories}"
+                                            th:value="${category.categoryCode}"
+                                            th:text="${category.name}">--Chọn danh mục--</option>
+                                </select>
+
+                                <label for="update_status" class="mt-3">Trạng Thái</label>
+                                <select name="status" id="update_status" class="form-control" required>
+                                    <option value="" disabled selected>--Chọn trạng thái--</option>
+                                    <option value="active">active</option>
+                                    <option value="inactive">inactive</option>
+                                    <option value="Out of Stock">Out of Stock</option>
+                                </select>
+
+                                <label for="update_img" class="mt-3">Ảnh</label>
+                                <input type="file" id="update_img" name="image" class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="mt-4 d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary">Cập Nhật</button>
+                            <button type="button" class="btn btn-secondary ms-2" data-bs-dismiss="modal">Đóng</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<th:block id="js">
+    <script th:inline="javascript">
+        // Khởi tạo DataTable
+        $('#table-product').DataTable({
+            responsive: true,
+            autoWidth: false,
+        });
+
+        // Toggle form
+        function toggleProductForm() {
+            const form = document.getElementById('product-form');
+            form.style.display = form.style.display === 'none' ? 'block' : 'none';
+        }
+
+        function populateUpdateForm(product) {
+            // Populate modal fields
+            document.getElementById('update_product_code').value = product.productCode;
+            document.getElementById('update_product_name').value = product.name;
+            document.getElementById('update_manufacturer_code').value = product.manufacturer.manufacturerCode;
+            document.getElementById('update_category_code').value = product.category.categoryCode;
+            document.getElementById('update_status').value = product.status;
+        }
+
+        // update
+        async function handleUpdate() {
+            const button = event.currentTarget;
+            const productCode = button.getAttribute('data-code');
+
+            const response = await fetch(`/api/products/${productCode}`);
+            const productData = await response.json();
+            populateUpdateForm(productData);
+            const myModal = new bootstrap.Modal(document.getElementById('updateProductModal'));
+            myModal.show();
+        }
+        window.onload = function () {
+            const detailButtons = document.querySelectorAll(".btn-detail");
+            const customerDetail = document.getElementById("customerDetail");
+            const closeButton = document.getElementById("closeButton");
+            const userInfoDiv = document.getElementById("userInfo");
+
+            closeButton.addEventListener("click", function () {
+                customerDetail.style.display = "none";
+            });
+        };
+
+    </script>
+</th:block>
+
+</body>
+</html>

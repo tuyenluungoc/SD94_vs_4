@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+    <title>Tất cả manufacturer</title>
+
+    <th:block id="css">
+
+    </th:block>
+</head>
+
+<body>
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                           Quản lý bảo hành
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row py-2">
+                <div class="col-12">
+
+                    <a href="/admin/ql-warranty" type="button" class="btn btn-info">
+                        <i class="fas fa-redo"></i> Refresh
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="table-manufacturer" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Mã bảo hành</th>
+                                    <th>inventory</th>
+                                    <th>startDate</th>
+                                    <th>endDate</th>
+                                    <th>Trạng thái</th>
+                                    <th>terms</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="warrant : ${warranty}">
+                                    <td th:text="${warrant.warrantyCode}"></td>
+                                    <td th:text="${warrant.inventory != null ? warrant.inventory.inventoryCode : 'Không có thông tin'}"></td>
+
+                                    <td th:text="${warrant.startDate}"></td>
+                                    <td th:text="${warrant.endDate}"></td>
+                                    <td th:text="${warrant.warrantyStatus}"></td>
+                                    <td th:text="${warrant.terms}"></td>
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+</body>
+</html>

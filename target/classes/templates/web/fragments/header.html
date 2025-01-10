@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+</head>
+
+<body>
+<header class="header">
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <a href="/"><img src="/img/logodji.png" alt="DJI Logo"></a>
+            </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            <ul class="menu">
+                <li><a href="/gioi-thieu">Giới Thiệu</a></li>
+                <li><a href="/san-pham">Sản Phẩm</a></li>
+                <li><a href="/huong-dan-mua-hang">Hướng Dẫn Mua Hàng</a></li>
+                <li><a href="/bao-hanh">Bảo Hành</a></li>
+                <li><a href="/tin-tuc">Tin Tức</a></li>
+                <li><a href="/lien-he">Liên Hệ</a></li>
+                <li><a href="/chatus">kênh thế giới</a></li>
+            </ul>
+            <script>
+                function toggleMenu() {
+                    const menu = document.querySelector('.menu');
+                    menu.classList.toggle('active');
+                }
+
+            </script>
+            <div class="search-cart">
+                <form id="searchForm" action="/search" method="GET">
+                    <input type="text" name="query" placeholder="Tìm kiếm" id="searchInput">
+                    <button type="submit" id="searchButton">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </form>
+                <a href="/own-shoppingcart" id="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span th:text="${totalItemsInCart}" style="color: #f7f7f7">0</span> <!-- Hiển thị số lượng sản phẩm -->
+                </a>
+
+                <!-- Giỏ hàng mini (ẩn mặc định) -->
+                <div id="miniCart" class="mini-cart" style="display: none">
+                    <h4>Giỏ hàng của bạn</h4>
+                    <div id="miniCartProducts">
+                        <!-- Các sản phẩm trong giỏ hàng sẽ được hiển thị ở đây -->
+                    </div>
+
+                </div>
+
+
+
+                <a href="/notifications" class="notification" id="notificationIcon">
+                    <i class="fas fa-bell"></i>
+                    <span class="notification-badge"></span>
+                </a>
+            </div>
+
+
+        </div>
+        <div>
+            <div th:if="${session.currentUser == null}">
+                <a class="text-white" href="/dang-nhap">Đăng nhập</a>
+            </div>
+            <div th:if="${session.currentUser != null}" class="d-flex align-items-center">
+                <p th:text="${session.currentUser.name}" class="mb-0 me-2 text-white"></p>
+                <a href="javascript:void(0)" class="text-white fst-italic" onclick="logout()">(Đăng xuất)</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Product Category Section -->
+
+</header>
+</body>
+
+</html>

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+    <title>Trạng thái đơn hàng</title>
+
+    <th:block id="css">
+        <style>
+
+            .cart-modal {
+                display: none;
+                position: fixed;
+                z-index: 1000;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%);
+                background-color: white;
+                border: 1px solid #ccc;
+                padding: 20px;
+                width: 50%;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+
+            .cart-btn-close {
+                background-color: red;
+                color: white;
+                border: none;
+                padding: 10px;
+                cursor: pointer;
+            }
+
+            .cart-item-image {
+                width: 80px;
+                height: auto;
+                margin-right: 10px;
+            }
+            .cart-item-image {
+                width: 80px;
+                height: auto;
+                margin-right: 10px;
+            }
+
+
+
+        </style>
+    </th:block>
+</head>
+
+<body>
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item active">
+                            Trạng thái đơn hàng
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row py-2">
+                <div class="col-12">
+
+                    <a href="/admin/trang-thai-don-hang" type="button" class="btn btn-info">
+                        <i class="fas fa-redo"></i> Refresh
+                    </a>
+                </div>
+            </div>
+            <div th:if="${message != null}" class="alert">
+                <p th:text="${message}"></p>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="table-manufacturer" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Mã trạng thái</th>
+                                    <th>Khách Hàng</th>
+                                    <th>Mã giỏ hàng</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao Tác</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+
+                                <tr th:each="status : ${status}">
+                                    <td th:text="${status.statusCode}"></td>
+                                    <td>
+                                        <a class="btn-detail" th:attr="data-id=${status.user.userCode}"
+                                           th:text="${status.user != null ? status.user.name : 'Không có thông tin'}">Người
+                                            dùng</a>
+                                    </td>
+                                    <!--                                    <td th:text="${status.shoppingCart != null ? status.shoppingCart.shoppingCartCode : 'Không có thông tin'}"></td>-->
+                                    <td>
+                                        <a class="btn-cart-detail"
+                                           th:attr="data-id=${status.shoppingCart.shoppingCartCode}"
+                                           th:text="${status.shoppingCart != null ? status.shoppingCart.shoppingCartCode : 'Không có thông tin'}">Xem
+                                            giỏ hàng</a>
+                                    </td>
+
+                                    <div id="cartDetailModal" class="cart-modal" style="display: none;">
+                                        <h2>Chi tiết giỏ hàng</h2>
+                                        <div id="cartInfoContent">
+                                            <!-- Dữ liệu giỏ hàng sẽ được cập nhật qua JavaScript -->
+                                        </div>
+                                        <button id="closeCartDetailButton" class="cart-btn-close">Đóng</button>
+                                    </div>
+
+
+
+                                    <td th:text="${status.nameStatus != null ? status.nameStatus : 'Không có thông tin'}"></td>
+
+                                    <td>
+                                        <!-- Form Cập Nhật Trạng Thái -->
+                                        <form th:action="@{/notifications/update-status/{statusCode}(statusCode=${status?.statusCode})}"
+                                              method="POST"
+                                              th:classappend="${status?.nameStatus == 'Hủy'} ? 'disabled-form'">
+                                            <select name="newStatus"
+                                                    th:disabled="${status?.nameStatus == 'Đã giao' || status?.nameStatus == 'Hủy'}">
+                                                <option value="Hủy" th:selected="${status?.nameStatus == 'Hủy'}">Hủy
+                                                </option>
+                                                <option value="Đang giao"
+                                                        th:selected="${status?.nameStatus == 'Đang giao'}">Đang giao
+                                                </option>
+                                                <option value="Đang gặp vấn đề"
+                                                        th:selected="${status?.nameStatus == 'Đang gặp vấn đề'}">Đang
+                                                    gặp vấn đề
+                                                </option>
+                                                <option value="Đã giao"
+                                                        th:selected="${status?.nameStatus == 'Đã giao'}">Đã giao
+                                                </option>
+                                            </select>
+
+                                            <button type="submit"
+                                                    th:disabled="${status?.nameStatus == 'Đã giao' || status?.nameStatus == 'Hủy'}">
+                                                Cập nhật trạng thái
+                                            </button>
+                                        </form>
+
+                                        <!-- Form Duyệt Hủy -->
+                                        <form th:action="@{/notifications/put-cancel-order/{shoppingCartCode}(shoppingCartCode=${status.shoppingCart.shoppingCartCode})}"
+                                              method="POST"
+                                              th:if="${status.nameStatus == 'Chờ xử lý'}"
+                                              th:classappend="${status?.nameStatus == 'Hủy'} ? 'disabled-form'">
+                                            <button type="submit" th:disabled="${status?.nameStatus == 'Hủy'}">
+                                                Duyệt Hủy
+                                            </button>
+                                        </form>
+
+                                        <!-- Form Hủy Yêu Cầu -->
+                                        <form th:action="@{/notifications/revoke-request/{shoppingCartCode}(shoppingCartCode=${status.shoppingCart.shoppingCartCode})}"
+                                              method="POST"
+                                              th:if="${status.nameStatus == 'Chờ xử lý'}"
+                                              th:classappend="${status?.nameStatus == 'Hủy'} ? 'disabled-form'">
+                                            <button type="submit" th:disabled="${status?.nameStatus == 'Hủy'}">
+                                                Hủy Yêu Cầu
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+
+                                </td>
+                                </tr>
+
+                                <div id="customerDetail" class="thong-tin-chi-tiet" style="display: none;">
+                                    <h2>Thông tin khách hàng</h2>
+                                    <div id="userInfo">
+                                        <!-- Dữ liệu sẽ được cập nhật qua JavaScript -->
+                                    </div>
+                                    <button id="closeButton" class="btn-close">Đóng</button>
+                                </div>
+
+
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+</body>
+</html>
+<th:block id="js">
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+            // Xử lý chi tiết khách hàng
+            const detailButtons = document.querySelectorAll(".btn-detail");
+            const customerDetail = document.getElementById("customerDetail");
+            const closeButton = document.getElementById("closeButton");
+            const userInfoDiv = document.getElementById("userInfo");
+
+            detailButtons.forEach(button => {
+                button.addEventListener("click", async function () {
+                    const userCode = button.getAttribute("data-id");
+                    try {
+                        const response = await fetch(`/admin/custumer/detail/${userCode}`);
+                        if (response.ok) {
+                            const user = await response.json();
+                            userInfoDiv.innerHTML = `
+                        <p><strong>Mã khách hàng:</strong> ${user.userCode}</p>
+                        <p>Tên: ${user.name}</p>
+                        <p>Email: ${user.email}</p>
+                        <p>Số điện thoại: ${user.sdt}</p>
+                        <p>Địa chỉ: ${user.address}</p>
+                    `;
+                            customerDetail.style.display = "block";
+                        } else {
+                            console.error("Không tìm thấy khách hàng với mã:", userCode);
+                        }
+                    } catch (error) {
+                        console.error("Lỗi khi lấy thông tin khách hàng:", error);
+                    }
+                });
+            });
+
+            closeButton.addEventListener("click", function () {
+                customerDetail.style.display = "none";
+            });
+
+            const cartButtons = document.querySelectorAll(".btn-cart-detail");
+            const cartModal = document.getElementById("cartDetailModal");
+            const closeCartButton = document.getElementById("closeCartDetailButton");
+            const cartInfoDiv = document.getElementById("cartInfoContent");
+
+            cartButtons.forEach(button => {
+                button.addEventListener("click", async function () {
+                    const cartCode = button.getAttribute("data-id");
+                    console.log("Clicked cart code: " + cartCode);  // Kiểm tra mã giỏ hàng khi nhấn
+
+                    try {
+                        const response = await fetch(`/notifications/detail/${cartCode}`);
+                        if (response.ok) {
+                            const cart = await response.json();
+                            console.log("Cart received:", cart);  // Kiểm tra thông tin giỏ hàng nhận được từ server
+
+                            let itemsHtml = '';
+
+                            if (cart.items.length > 0) {
+                                cart.items.forEach(item => {
+                                    itemsHtml += `
+                            <div class="cart-item">
+                                <img src="${item.image}" alt="Hình ảnh sản phẩm" class="cart-item-image">
+                                <p>Số lượng: ${item.quantity}</p>
+                            </div>
+                            <hr>
+                        `;
+                                });
+                            } else {
+                                itemsHtml = '<p>Giỏ hàng trống.</p>';
+                            }
+
+                            cartInfoDiv.innerHTML = `
+                    <p><strong>Mã giỏ hàng:</strong> ${cart.cartCode}</p>
+                    <div>${itemsHtml}</div>
+                `;
+                            cartModal.style.display = "block";
+                        } else {
+                            console.error("Không tìm thấy giỏ hàng với mã:", cartCode);
+                        }
+                    } catch (error) {
+                        console.error("Lỗi khi lấy thông tin giỏ hàng:", error);
+                    }
+                });
+            });
+
+            closeCartButton.addEventListener("click", function () {
+                cartModal.style.display = "none";
+            });
+
+        });
+
+
+
+    </script>
+</th:block>

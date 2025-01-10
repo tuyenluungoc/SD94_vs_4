@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="https://www.thymeleaf.org"
+      th:replace="~{admin/layout/layout :: layout(~{:: title}, ~{:: #css}, ~{:: .content-wrapper}, ~{:: #js})}">
+
+<head>
+    <title>Tất cả bài viết</title>
+
+    <th:block id="css">
+
+    </th:block>
+</head>
+
+<body>
+<div class="content-wrapper">
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2">
+                <div class="col-sm-12">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/admin/dashboard">Dashboard</a>
+                        </li>
+                        <li class="breadcrumb-item active">Danh sách Giỏ hàng</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main content -->
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row py-2">
+                <div class="col-12">
+                    <a href="/admin/admin-all-shoppingcarts" type="button" class="btn btn-info">
+                        <i class="fas fa-redo"></i> Refresh
+                    </a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <table id="table-shoppingcarts" class="table table-bordered table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Mã Giỏ hàng</th>
+                                    <th>Người dùng</th>
+                                    <th>Ngày tạo</th>
+                                    <th>Trạng thái</th>
+                                    <th>Hành Động</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Lặp qua từng giỏ hàng -->
+                                <tr th:each="cart : ${shoppingCarts}">
+                                    <td th:text="${cart.shoppingCartCode}"></td>
+                                    <td>
+                                        <a th:href="@{/admin/custumer/detail/{userCode}(userCode=${cart.user.getUserCode()})}"
+                                           th:text="${cart.user.name}">Nguyễn Văn A</a>
+                                    </td>
+                                    <td th:text="${#dates.format(cart.createdAt, 'dd/MM/yyyy')}"></td>
+
+                                    <td th:text="${cart.status ? 'Hoàn thành' : 'Chưa hoàn thành'}"></td>
+
+                                    <td>
+                                        <a th:href="@{/admin/shoppingcarts/delete/{shoppingCartCode}(shoppingCartCode=${cart.shoppingCartCode})}"
+                                           class="btn btn-danger"
+                                           onclick="return confirm('Bạn chắc chắn muốn xóa giỏ hàng này?');">
+                                            <i class="fas fa-trash"></i> Xóa
+                                        </a>
+                                    </td>   <td>
+                                    <a th:data-bs-toggle="modal" th:data-bs-target="'#cartDetailModal' + ${cart.shoppingCartCode}" class="btn btn-info">
+                                        Chi tiết
+                                    </a>
+                                    <div class="modal fade" th:id="'cartDetailModal' + ${cart.shoppingCartCode}" tabindex="-1" aria-labelledby="cartDetailModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="cartDetailModalLabel">Chi Tiết Giỏ Hàng</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <h3>Chi tiết Giỏ hàng</h3>
+                                                            <table class="table table-bordered cart-table">
+                                                                <thead class="table-light">
+                                                                <tr>
+                                                                    <th>Sản Phẩm</th>
+                                                                    <th>Giá</th>
+                                                                    <th>Số Lượng</th>
+                                                                    <th>Tổng Cộng</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                <th:block th:each="shoppingCartProduct : ${shoppingCartProducts}">
+                                                                    <tr>
+                                                                        <td>
+                                                                            <div class="d-flex align-items-center">
+                                                                                <img th:src="@{${shoppingCartProduct.product.image}}" alt="Sản phẩm" class="img-thumbnail" style="width: 60px; height: 60px;">
+                                                                                <p class="ms-3 mb-0" th:text="${shoppingCartProduct.product.name}">Sản phẩm</p>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td th:text="${shoppingCartProduct.price} + ' VND'">0 VND</td>
+                                                                        <td th:text="${shoppingCartProduct.amount}">1</td>
+                                                                        <td th:text="${shoppingCartProduct.price * shoppingCartProduct.amount} + ' VND'">0 VND</td>
+                                                                    </tr>
+                                                                </th:block>
+                                                                </tbody>
+                                                                <tr>
+                                                                    <td colspan="3" class="text-end"><strong>Tổng Cộng:</strong></td>
+                                                                    <td th:text="${totalAmount} + ' VND'" id="totalAmountM">0 VND</td>
+                                                                </tr>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </td>
+
+
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+    </section>
+    <!-- Modal -->
+    <!-- Modal để hiển thị chi tiết giỏ hàng -->
+
+    <!-- DataTables JS -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#table-shoppingcarts').DataTable({
+                paging: true,
+                lengthChange: true,
+                searching: true,
+                ordering: true,
+                info: true,
+                autoWidth: false,
+                responsive: true,
+            });
+        });
+    </script>
+</div>
+
+</body>
+</html>
